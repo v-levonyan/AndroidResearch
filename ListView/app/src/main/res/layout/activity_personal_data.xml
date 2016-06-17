@@ -17,9 +17,7 @@
         android:layout_below="@+id/textLastName"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,8 +25,11 @@
         android:text="New Text"
         android:id="@+id/textLastName"
         android:layout_below="@+id/textEmail"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_toRightOf="@+id/textEmail"
+        android:layout_toEndOf="@+id/textEmail"
+        android:layout_marginLeft="51dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="81dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,6 +63,8 @@
         android:layout_height="wrap_content"
         android:text="New Text"
         android:id="@+id/textAge"
+        android:layout_marginTop="32dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

@@ -10,11 +10,16 @@ public class PersonalDataActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_data);
+        setContentView(R.layout.activity_personal_info);
         Intent intent = getIntent();
 
-        String message = intent.getStringExtra("message");
-        ((TextView)findViewById(R.id.textView)).setText(message);
+        Person person1 = (Person)intent.getSerializableExtra("person1");
 
+        ((TextView)findViewById(R.id.textName)).setText(person1.getName());
+        ((TextView)findViewById(R.id.textAge)).setText(person1.getAge());
+        ((TextView)findViewById(R.id.textCompany)).setText(person1.getCompany());
+        ((TextView)findViewById(R.id.textEmail)).setText(person1.getEmail());
+        ((TextView)findViewById(R.id.textJobTitle)).setText(person1.getJobTitle());
+        ((TextView)findViewById(R.id.textLastName)).setText(person1.getLastName());
     }
 }

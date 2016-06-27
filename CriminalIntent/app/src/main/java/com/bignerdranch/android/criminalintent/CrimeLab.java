@@ -8,11 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import com.bignerdranch.android.criminalintent.database.CrimeBaseHelper;
 import com.bignerdranch.android.criminalintent.database.CrimeCursorWrapper;
 
+import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeTable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.bignerdranch.android.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
@@ -29,41 +29,18 @@ public class CrimeLab {
 
     private CrimeLab(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
+        mDatabase = new CrimeBaseHelper(mContext)
+                .getWritableDatabase();
     }
 
-    public List<Crime> getCrimes() {
-        List<Crime> crimes = new ArrayList<>();
-        CrimeCursorWrapper cursor = queryCrimes(null, null);
+    private static ContentValues getContentValues(Crime crime) {
+        ContentValues values = new ContentValues();
+        values.put(CrimeTable.Cols.UUID, crime.getId().toString());
+        values.put(CrimeTable.Cols.TITLE, crime.getTitle());
+        values.put(CrimeTable.Cols.DATE, crime.getDate().getTime());
+        values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
 
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                crimes.add(cursor.getCrime());
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
-        }
-        return crimes;
-    }
-
-    public Crime getCrime(UUID id) {
-        CrimeCursorWrapper cursor = queryCrimes(
-                CrimeTable.Cols.UUID + " =?",
-                new String[]{id.toString()}
-        );
-
-        try {
-            if (cursor.getCount() == 0) {
-                return null;
-            }
-
-            cursor.moveToFirst();
-            return cursor.getCrime();
-        } finally {
-            cursor.close();
-        }
+        return values;
     }
 
     public void addCrime(Crime c) {
@@ -77,18 +54,8 @@ public class CrimeLab {
         ContentValues values = getContentValues(crime);
 
         mDatabase.update(CrimeTable.NAME, values,
-                CrimeTable.Cols.UUID + " =?",
-                new String[]{uuidString});
-    }
-
-    private static ContentValues getContentValues(Crime crime) {
-        ContentValues values = new ContentValues();
-        values.put(CrimeTable.Cols.UUID, crime.getId().toString());
-        values.put(CrimeTable.Cols.TITLE, crime.getTitle().toString());
-        values.put(CrimeTable.Cols.DATE, crime.getDate().toString());
-        values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
-
-        return values;
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { uuidString });
     }
 
     private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
@@ -99,8 +66,43 @@ public class CrimeLab {
                 whereArgs,
                 null, // groupBy
                 null, // having
-                null // orderBy
+                null  // orderBy
         );
+
         return new CrimeCursorWrapper(cursor);
+    }
+
+
+    public List<Crime> getCrimes() {
+        List<Crime> crimes = new ArrayList<>();
+
+        CrimeCursorWrapper cursor = queryCrimes(null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            crimes.add(cursor.getCrime());
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return crimes;
+    }
+
+    public Crime getCrime(UUID id) {
+        CrimeCursorWrapper cursor = queryCrimes(
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { id.toString() }
+        );
+
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+
+            cursor.moveToFirst();
+            return cursor.getCrime();
+        } finally {
+            cursor.close();
+        }
     }
 }

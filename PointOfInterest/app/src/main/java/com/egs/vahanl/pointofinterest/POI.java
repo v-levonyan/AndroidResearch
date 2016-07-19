@@ -8,76 +8,76 @@ import android.graphics.PointF;
  * Created by vahanl on 7/18/16.
  */
 public class POI {
-    private int mId;
-    private String mTitle;
-    private String mAddress;
-    private String mTransport;
-    private String mEmail;
-    private PointF mLocation;
-    private String mDescription;
-    private String mPhone;
+    private int id;
+    private String title;
+    private String address;
+    private String transport;
+    private String email;
+    private String geocoordinates;
+    private String description;
+    private String phone;
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public String getTitle() {
-        return mTitle;
+        return title;
     }
 
     public String getAddress() {
-        return mAddress;
+        return address;
     }
 
     public String getTransport() {
-        return mTransport;
+        return transport;
     }
 
     public String getEmail() {
-        return mEmail;
+        return email;
     }
 
-    public PointF getLocation() {
-        return mLocation;
+    public String getGeocoordinates() {
+        return geocoordinates;
     }
 
     public String getDescription() {
-        return mDescription;
+        return description;
     }
 
     public String getPhone() {
-        return mPhone;
+        return phone;
     }
 
     public void setId(int id) {
-        mId = id;
+        this.id = id;
     }
 
     public void setTitle(String title) {
-        mTitle = title;
+        this.title = title;
     }
 
     public void setAddress(String address) {
-        mAddress = address;
+        this.address = address;
     }
 
     public void setTransport(String transport) {
-        mTransport = transport;
+        this.transport = transport;
     }
 
     public void setEmail(String email) {
-        mEmail = email;
+        this.email = email;
     }
 
-    public void setLocation(PointF location) {
-        mLocation = location;
+    public void setGeocoordinates(String geocoordinates) {
+        this.geocoordinates = geocoordinates;
     }
 
     public void setDescription(String description) {
-        mDescription = description;
+        this.description = description;
     }
 
     public void setPhone(String phone) {
-        mPhone = phone;
+        this.phone = phone;
     }
 }

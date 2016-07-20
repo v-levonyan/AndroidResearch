@@ -1,8 +1,5 @@
 package com.egs.vahanl.pointofinterest;
 
-//import java.awt.geom.Point2D.Point2D.Float;
-
-import android.graphics.PointF;
 
 /**
  * Created by vahanl on 7/18/16.

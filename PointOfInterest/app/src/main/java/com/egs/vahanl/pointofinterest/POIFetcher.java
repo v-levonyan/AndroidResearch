@@ -1,6 +1,5 @@
 package com.egs.vahanl.pointofinterest;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.gson.Gson;

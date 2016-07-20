@@ -25,7 +25,7 @@ public class POIBaseHelper extends SQLiteOpenHelper {
         POITable.Cols.ADDRESS + ", " +
         POITable.Cols.TRANSPORT + ", " +
         POITable.Cols.EMAIL + ", " +
-        POITable.Cols.LOCATION + ", " +
+        POITable.Cols.GEOCOORDINATES + ", " +
         POITable.Cols.DESCRIPTION + ", " +
         POITable.Cols.PHONE + ")"
         );

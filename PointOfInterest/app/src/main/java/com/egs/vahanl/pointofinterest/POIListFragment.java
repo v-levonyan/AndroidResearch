@@ -8,17 +8,31 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * Created by vahanl on 7/18/16.
  */
-public class POIListFragment extends Fragment {
+public class POIListFragment extends Fragment implements
+        Callback<RetroPoiList> {
 
     private static final String TAG = "POIListFragment";
 
@@ -28,8 +42,9 @@ public class POIListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         setRetainInstance(true);
-        new FetchItemTask().execute();
+//        new FetchItemTask().execute();
     }
 
     public static Fragment newInstance() {
@@ -44,6 +59,52 @@ public class POIListFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_poi, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_load:
+                //TODO: use retrofit
+
+                Gson gson = new GsonBuilder().create();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://t21services.herokuapp.com")
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .build();
+                POIApi poiApi = retrofit.create(POIApi.class);
+
+                Call<RetroPoiList> call = poiApi.loadPois("points");
+
+                call.enqueue(this);
+
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+
+
+
+    @Override
+    public void onResponse(Call<RetroPoiList> call, Response<RetroPoiList> response) {
+        mPOIAdapter = new POIAdapter(response.body().list);
+        mPOIRecyclerView.setAdapter(mPOIAdapter);
+    }
+
+    @Override
+    public void onFailure(Call<RetroPoiList> call, Throwable t) {
+        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+
+    }
 
 
     private class POIHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -1,4 +1,4 @@
-package com.egs.vahanl.pointofinterest;
+package com.egs.vahanl.pointofinterest.database;
 
 /**
  * Created by vahanl on 7/18/16.

@@ -2,11 +2,13 @@ package com.egs.vahanl.pointofinterest;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.IntegerRes;
 
-import com.egs.vahanl.pointofinterest.POIDbSchema.POITable;
-import com.google.gson.Gson;
+import com.egs.vahanl.pointofinterest.database.POICursorWrapper;
+import com.egs.vahanl.pointofinterest.database.POIDbSchema.POITable;
+import com.egs.vahanl.pointofinterest.database.POIBaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,6 @@ public class POIList {
     private static POIList sPOIList;
     private Context mContext;
     private SQLiteDatabase mDatabase;
-    private List<POI> mPOIs;
 
     public static POIList getInstance(Context context) {
         if (sPOIList == null) {
@@ -30,16 +31,38 @@ public class POIList {
     private POIList(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new POIBaseHelper(mContext).getWritableDatabase();
-        mPOIs = new ArrayList<>();
     }
 
 
     public List<POI> getPOIs() {
-        return mPOIs;
+        List<POI> pois = new ArrayList<>();
+
+        POICursorWrapper cursor = queryPois(null, null);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                pois.add(cursor.getPoi());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return pois;
     }
 
-    public void setPOIs(List<POI> POIs) {
-        mPOIs = POIs;
+    public POI getPoi(int id) {
+        POICursorWrapper cursor = queryPois(POITable.Cols.ID + " =?",
+                new String[] {Integer.toString(id)});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            return cursor.getPoi();
+        } finally {
+            cursor.close();
+        }
     }
 
     public void addPOI(POI poi) {
@@ -47,22 +70,12 @@ public class POIList {
         mDatabase.insert(POITable.NAME, null, values);
     }
 
-    public POI getPoiById(int id) {
-        POI foundPoi = new POI();
-        for (POI poi: mPOIs) {
-            if (poi.getId() == id) {
-                foundPoi = poi;
-            }
-        }
-        return foundPoi;
-    }
-
     public void updatePOI(POI poi) {
         String idString = Integer.toString(poi.getId());
         ContentValues values = getContentValues(poi);
         mDatabase.update(POITable.NAME, values,
                 POITable.Cols.ID + " =?",
-                new String[] {idString});
+                new String[]{idString});
     }
 
     private static ContentValues getContentValues(POI poi) {
@@ -77,5 +90,18 @@ public class POIList {
         values.put(POITable.Cols.PHONE, poi.getPhone());
 
         return values;
+    }
+
+    private POICursorWrapper queryPois(String whereClause, String[] whereArgs) {
+        Cursor cursor = mDatabase.query(
+                POITable.NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+        return new POICursorWrapper(cursor);
     }
 }

@@ -14,9 +14,33 @@ public class POI {
     private String description;
     private String phone;
 
+    public POI() {
+
+    }
+
+    public POI(
+            int id,
+            String title,
+            String address,
+            String transport,
+            String email,
+            String geocoordinates,
+            String description,
+            String phone
+    ) {
+        this.id = id;
+        this.title = title;
+        this.address = address;
+        this.transport = transport;
+        this.email = email;
+        this.geocoordinates = geocoordinates;
+        this.description = description;
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
-        return title +" : " + geocoordinates;
+        return title + " : " + geocoordinates;
     }
 
     public int getId() {

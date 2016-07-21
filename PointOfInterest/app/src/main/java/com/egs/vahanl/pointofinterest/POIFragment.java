@@ -89,6 +89,7 @@ public class POIFragment extends Fragment
         return v;
     }
 
+
     @Override
     public void onResponse(Call<POI> call, Response<POI> response) {
 //        mTitleTextView.setText(mPOI.getTitle());

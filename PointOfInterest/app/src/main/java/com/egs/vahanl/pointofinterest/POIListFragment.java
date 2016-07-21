@@ -72,12 +72,8 @@ public class POIListFragment extends Fragment implements
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build();
                 POIListApi poiApi = retrofit.create(POIListApi.class);
-
                 Call<RetroPoiList> call = poiApi.loadPois("points");
-
                 call.enqueue(this);
-
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -146,14 +142,24 @@ public class POIListFragment extends Fragment implements
         public int getItemCount() {
             return mPOIs.size();
         }
+
+        public void setPois(List<POI> pois) {
+            mPOIs = pois;
+        }
     }
 
-    private void updateUI() {
+    public void updateUi() {
+        //TODO:think about
         POIList poiList = POIList.getInstance(getActivity());
         List<POI> pois = poiList.getPOIs();
-        mPOIAdapter = new POIAdapter(pois);
-        mPOIRecyclerView.setAdapter(mPOIAdapter);
-    }
 
+        if (mPOIAdapter == null) {
+            mPOIAdapter = new POIAdapter(pois);
+            mPOIRecyclerView.setAdapter(mPOIAdapter);
+        } else {
+            mPOIAdapter.setPois(pois);
+            mPOIAdapter.notifyDataSetChanged();
+        }
+    }
 
 }

@@ -16,7 +16,7 @@ public class POICursorWrapper extends CursorWrapper {
     }
 
     public POI getPoi() {
-        int id = getInt(getColumnIndex(POITable.Cols.ID));
+        String idString = getString(getColumnIndex(POITable.Cols.ID));
         String title = getString(getColumnIndex(POITable.Cols.TITLE));
         String address = getString(getColumnIndex(POITable.Cols.ADDRESS));
         String transport = getString(getColumnIndex(POITable.Cols.TRANSPORT));
@@ -26,7 +26,7 @@ public class POICursorWrapper extends CursorWrapper {
         String phone = getString(getColumnIndex(POITable.Cols.PHONE));
 
         POI poi = new POI(
-                id, title,
+                Integer.parseInt(idString), title,
                 address, transport,
                 email, geocoordinates,
                 description, phone);

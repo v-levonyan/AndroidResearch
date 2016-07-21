@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -65,6 +66,9 @@ public class POIFragment extends Fragment
     }
 
     private void setTextFields(POI poi) {
+        if (poi == null) {
+            return;
+        }
         mTitleTextView.setText(poi.getTitle());
         mTransportTextView.setText(poi.getTransport());
         mEmailTextView.setText(poi.getTitle());
@@ -92,13 +96,17 @@ public class POIFragment extends Fragment
 
     @Override
     public void onResponse(Call<POI> call, Response<POI> response) {
-//        mTitleTextView.setText(mPOI.getTitle());
         mPOI = response.body();
         setTextFields(mPOI);
+        POIList.getInstance(getActivity()).addPOIToDb(mPOI);
     }
 
     @Override
     public void onFailure(Call<POI> call, Throwable t) {
+//        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
 
+        int poiId = getArguments().getInt(ARG_POI_ID);
+        mPOI = POIList.getInstance(getActivity()).getPoi(poiId);
+        setTextFields(mPOI);
     }
 }

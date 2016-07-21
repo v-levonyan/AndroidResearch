@@ -53,6 +53,7 @@ public class POIListFragment extends Fragment implements
         View v = inflater.inflate(R.layout.fragment_list_poi, container, false);
         mPOIRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_poi_recycler_view);
         mPOIRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUi();
         return v;
     }
 
@@ -86,6 +87,7 @@ public class POIListFragment extends Fragment implements
         mPOIs = response.body().list;
         mPOIAdapter = new POIAdapter(mPOIs);
         mPOIRecyclerView.setAdapter(mPOIAdapter);
+        POIList.getInstance(getActivity()).addPoisToDb(mPOIs);
     }
 
     @Override

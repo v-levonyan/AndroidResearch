@@ -65,12 +65,18 @@ public class POIList {
         }
     }
 
-    public void addPOI(POI poi) {
+    public void addPOIToDb(POI poi) {
         ContentValues values = getContentValues(poi);
         mDatabase.insert(POITable.NAME, null, values);
     }
 
-    public void updatePOI(POI poi) {
+    public void addPoisToDb(List<POI> pois) {
+        for (POI poi : pois) {
+            addPOIToDb(poi);
+        }
+    }
+
+    public void updatePOIDb(POI poi) {
         String idString = Integer.toString(poi.getId());
         ContentValues values = getContentValues(poi);
         mDatabase.update(POITable.NAME, values,
@@ -80,7 +86,7 @@ public class POIList {
 
     private static ContentValues getContentValues(POI poi) {
         ContentValues values = new ContentValues();
-        values.put(POITable.Cols.ID, poi.getId());
+        values.put(POITable.Cols.ID, Integer.toString(poi.getId()));
         values.put(POITable.Cols.TITLE, poi.getTitle());
         values.put(POITable.Cols.ADDRESS, poi.getAddress());
         values.put(POITable.Cols.TRANSPORT, poi.getTransport());

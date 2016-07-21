@@ -1,12 +1,10 @@
 package com.egs.vahanl.pointofinterest;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -38,13 +35,13 @@ public class POIListFragment extends Fragment implements
 
     private RecyclerView mPOIRecyclerView;
     private POIAdapter mPOIAdapter;
+    private List<POI> mPOIs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setRetainInstance(true);
-//        new FetchItemTask().execute();
     }
 
     public static Fragment newInstance() {
@@ -69,19 +66,16 @@ public class POIListFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_load:
-                //TODO: use retrofit
-
                 Gson gson = new GsonBuilder().create();
                 Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://t21services.herokuapp.com")
+                        .baseUrl(POIApi.ENDPOIT)
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build();
-                POIApi poiApi = retrofit.create(POIApi.class);
+                POIListApi poiApi = retrofit.create(POIListApi.class);
 
                 Call<RetroPoiList> call = poiApi.loadPois("points");
 
                 call.enqueue(this);
-
 
 
                 return true;
@@ -91,12 +85,10 @@ public class POIListFragment extends Fragment implements
     }
 
 
-
-
-
     @Override
     public void onResponse(Call<RetroPoiList> call, Response<RetroPoiList> response) {
-        mPOIAdapter = new POIAdapter(response.body().list);
+        mPOIs = response.body().list;
+        mPOIAdapter = new POIAdapter(mPOIs);
         mPOIRecyclerView.setAdapter(mPOIAdapter);
     }
 
@@ -156,35 +148,9 @@ public class POIListFragment extends Fragment implements
         }
     }
 
-    private class FetchItemTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                String urlString = "http://t21services.herokuapp.com/points";
-                POIFetcher poiFetcher = new POIFetcher();
-                String result = poiFetcher.doGetRequest(urlString);
-                List<POI> pois = poiFetcher.getItems(result);
-                POIList.getInstance(getActivity()).setPOIs(pois);
-
-//                String result = poiFetcher.fetchItem(urlString, 1);
-//                POI poi = poiFetcher.getItem(result);
-                Log.i(TAG, "Fetch contents of url: maagic!!!" + pois.get(1).getGeocoordinates());
-            } catch (IOException ioe) {
-                Log.e(TAG, "Failed to fetch url: ", ioe);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            updateUI();
-        }
-    }
-
     private void updateUI() {
         POIList poiList = POIList.getInstance(getActivity());
-        List<POI> pois= poiList.getPOIs();
+        List<POI> pois = poiList.getPOIs();
         mPOIAdapter = new POIAdapter(pois);
         mPOIRecyclerView.setAdapter(mPOIAdapter);
     }

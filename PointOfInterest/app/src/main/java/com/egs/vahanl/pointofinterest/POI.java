@@ -14,6 +14,11 @@ public class POI {
     private String description;
     private String phone;
 
+    @Override
+    public String toString() {
+        return title +" : " + geocoordinates;
+    }
+
     public int getId() {
         return id;
     }

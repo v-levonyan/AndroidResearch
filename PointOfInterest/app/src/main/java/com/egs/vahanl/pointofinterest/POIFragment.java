@@ -98,13 +98,11 @@ public class POIFragment extends Fragment
     public void onResponse(Call<POI> call, Response<POI> response) {
         mPOI = response.body();
         setTextFields(mPOI);
-        POIList.getInstance(getActivity()).addPOIToDb(mPOI);
+        POIList.getInstance(getActivity()).updatePOIDb(mPOI);
     }
 
     @Override
     public void onFailure(Call<POI> call, Throwable t) {
-//        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
         int poiId = getArguments().getInt(ARG_POI_ID);
         mPOI = POIList.getInstance(getActivity()).getPoi(poiId);
         setTextFields(mPOI);

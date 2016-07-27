@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TestTesseract</string>
+    <string name="button_ocr_text">Run OCR</string>
+    <string name="ocred_text">OCR Text will appear here</string>
+</resources>

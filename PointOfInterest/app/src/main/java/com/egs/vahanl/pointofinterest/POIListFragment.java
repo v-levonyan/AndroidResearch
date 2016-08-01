@@ -14,16 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by vahanl on 7/18/16.
@@ -67,20 +62,12 @@ public class POIListFragment extends Fragment implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_load:
-                Gson gson = new GsonBuilder().create();
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(POIApi.ENDPOIT)
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .build();
-                POIListApi poiApi = retrofit.create(POIListApi.class);
-                Call<RetroPoiList> call = poiApi.loadPois("points");
-                call.enqueue(this);
+                NetworkUtils.loadPois(this);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     public void onResponse(Call<RetroPoiList> call, Response<RetroPoiList> response) {
@@ -93,7 +80,6 @@ public class POIListFragment extends Fragment implements
     @Override
     public void onFailure(Call<RetroPoiList> call, Throwable t) {
         Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-
     }
 
 
@@ -155,12 +141,15 @@ public class POIListFragment extends Fragment implements
         POIList poiList = POIList.getInstance(getActivity());
         List<POI> pois = poiList.getPOIs();
 
+        if (pois.isEmpty()) {
+            NetworkUtils.loadPois(this);
+        }
+
         if (mPOIAdapter == null) {
             mPOIAdapter = new POIAdapter(pois);
             mPOIRecyclerView.setAdapter(mPOIAdapter);
         } else {
             mPOIAdapter.setPois(pois);
-            mPOIAdapter.notifyDataSetChanged();
         }
     }
 

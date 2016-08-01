@@ -52,17 +52,7 @@ public class POIFragment extends Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int poiId = getArguments().getInt(ARG_POI_ID);
-        Gson gson = new GsonBuilder().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(POIApi.ENDPOIT)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-        POIApi poiApi = retrofit.create(POIApi.class);
-
-        Call<POI> call = poiApi.getPoint(poiId);
-
-        call.enqueue(this);
-
+        NetworkUtils.loadPoi(this, poiId);
     }
 
     private void setTextFields(POI poi) {

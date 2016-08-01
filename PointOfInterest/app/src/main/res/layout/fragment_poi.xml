@@ -12,52 +12,52 @@
         <TextView
             android:id="@+id/title_textView"
             style="?android:listSeparatorTextViewStyle"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            />
 
         <TextView
             android:id="@+id/address_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
         <TextView
             android:id="@+id/transport_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
         <TextView
             android:id="@+id/email_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
         <TextView
             android:id="@+id/geocoordinates_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
         <TextView
             android:id="@+id/desciption_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
         <TextView
             android:id="@+id/phone_textView"
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"/>
+            />
 
     </LinearLayout>
 </ScrollView>

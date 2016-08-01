@@ -1,5 +1,6 @@
 package com.egs.vahanl.pointofinterest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -77,6 +78,15 @@ public class POIFragment extends Fragment
         mTransportTextView = (TextView) v.findViewById(R.id.transport_textView);
         mEmailTextView = (TextView) v.findViewById(R.id.email_textView);
         mGeoCoordTextView = (TextView) v.findViewById(R.id.geocoordinates_textView);
+
+        mGeoCoordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = LocationActivity.newIntent(getActivity(), mPOI.getGeocoordinates());
+                startActivity(i);
+            }
+        });
+
         mDescriptionTextView = (TextView) v.findViewById(R.id.desciption_textView);
         mPhoneTextView = (TextView) v.findViewById(R.id.phone_textView);
 

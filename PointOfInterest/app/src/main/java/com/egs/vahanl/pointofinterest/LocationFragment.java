@@ -1,14 +1,8 @@
 package com.egs.vahanl.pointofinterest;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +21,6 @@ public class LocationFragment extends SupportMapFragment {
 
     private static final String ARG_COORD = "coord";
 
-    private GoogleApiClient mClient;
     private GoogleMap mMap;
     private String mGeocoord;
 
@@ -47,11 +40,6 @@ public class LocationFragment extends SupportMapFragment {
         mGeocoord = getArguments().getString(ARG_COORD);
         Log.i(TAG, "Received coords: " + mGeocoord);
 
-
-        mClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(LocationServices.API)
-                .build();
-
         getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -59,18 +47,6 @@ public class LocationFragment extends SupportMapFragment {
                 updateUI();
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mClient.connect();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mClient.disconnect();
     }
 
     private void updateUI() {

@@ -1,25 +1,22 @@
 package com.egs.vahanl.pointofinterest;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by vahanl on 7/20/16.
@@ -40,6 +37,7 @@ public class POIFragment extends Fragment
     private TextView mGeoCoordTextView;
     private TextView mDescriptionTextView;
     private TextView mPhoneTextView;
+    private Button mCallButton;
 
     public static Fragment newInstance(int poiId) {
         Bundle args = new Bundle();
@@ -89,8 +87,26 @@ public class POIFragment extends Fragment
 
         mDescriptionTextView = (TextView) v.findViewById(R.id.desciption_textView);
         mPhoneTextView = (TextView) v.findViewById(R.id.phone_textView);
-
+        mCallButton = (Button) v.findViewById(R.id.button_call);
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String phoneNumber = mPOI.getPhone().toLowerCase();
+                phoneNumber = phoneNumber.split("[;|?]", 2)[0];
+                if (isValidPhone(phoneNumber)) {
+                    Uri phoneUri = Uri.parse(phoneNumber);
+                    Intent i = new Intent(Intent.ACTION_DIAL);
+                    i.setData(phoneUri);
+                    startActivity(i);
+                }
+            }
+        });
         return v;
+    }
+
+    private boolean isValidPhone(String phone) {
+        //TODO: do more
+        return phone.matches("^[a-zA-Z0-9_:+? ]*$");
     }
 
 

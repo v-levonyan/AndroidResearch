@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -52,12 +53,31 @@
             android:layout_height="wrap_content"
             />
 
-        <TextView
-            android:id="@+id/phone_textView"
-            style="?android:listSeparatorTextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/phone_textView"
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="phone number"
+                android:layout_weight="5"
+                android:background="@android:drawable/stat_sys_phone_call"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/call_button_text"
+                android:id="@+id/button_call"
+                android:layout_weight="1"
+                />
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>

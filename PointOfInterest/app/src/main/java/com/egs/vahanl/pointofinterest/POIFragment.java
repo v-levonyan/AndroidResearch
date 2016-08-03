@@ -87,6 +87,7 @@ public class POIFragment extends Fragment
         mDescriptionTextView = (TextView) v.findViewById(R.id.desciption_textView);
         mPhoneTextView = (TextView) v.findViewById(R.id.phone_textView);
         mCallButton = (Button) v.findViewById(R.id.button_call);
+        mCallButton.setVisibility(View.GONE);
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,6 +115,7 @@ public class POIFragment extends Fragment
         mPOI = response.body();
         setTextFields(mPOI);
         POIList.getInstance(getActivity()).updatePOIDb(mPOI);
+        mCallButton.setVisibility(View.VISIBLE);
     }
 
     @Override

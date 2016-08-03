@@ -73,6 +73,7 @@
                 android:text="@string/call_button_text"
                 android:id="@+id/button_call"
                 android:layout_weight="1"
+                android:visibility="gone"
                 />
 
 

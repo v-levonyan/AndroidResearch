@@ -37,6 +37,7 @@
             style="?android:listSeparatorTextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="email"
             />
 
         <TextView
@@ -64,8 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="phone number"
-                android:layout_weight="5"
-                android:background="@android:drawable/stat_sys_phone_call"/>
+                android:layout_weight="5"/>
 
             <Button
                 android:layout_width="wrap_content"

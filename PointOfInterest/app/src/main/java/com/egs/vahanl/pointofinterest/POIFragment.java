@@ -92,8 +92,9 @@ public class POIFragment extends Fragment
             @Override
             public void onClick(View view) {
                 String phoneNumber = mPOI.getPhone().toLowerCase();
-                phoneNumber = phoneNumber.split("[;|?]", 2)[0];
-                if (isValidPhone(phoneNumber)) {
+                phoneNumber = extractNumber(phoneNumber);
+                if (!phoneNumber.isEmpty()) {
+                    phoneNumber = "tel:" + phoneNumber;
                     Uri phoneUri = Uri.parse(phoneNumber);
                     Intent i = new Intent(Intent.ACTION_DIAL);
                     i.setData(phoneUri);
@@ -104,9 +105,16 @@ public class POIFragment extends Fragment
         return v;
     }
 
-    private boolean isValidPhone(String phone) {
+    private String extractNumber(String phone) {
         //TODO: do more
-        return phone.matches("^[a-zA-Z0-9_:+? ]*$");
+        phone = phone.split("[;|?]", 2)[0];
+        StringBuilder phoneNumber = new StringBuilder();
+        for (int i = 0; i < phone.length(); i++) {
+            if (Character.isDigit(phone.charAt(i))) {
+                phoneNumber.append(phone.charAt(i));
+            }
+        }
+        return phoneNumber.toString();
     }
 
 

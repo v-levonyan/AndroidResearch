@@ -3,8 +3,10 @@ package com.egs.vahanl.pointofinterest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,6 +59,35 @@ public class POIListFragment extends Fragment implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_poi, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                final List<POI> filteredPOIList = filter(mPOIs, query);
+                mPOIAdapter.animateTo(filteredPOIList);
+                mPOIRecyclerView.scrollToPosition(0);
+                return true;
+            }
+        });
+    }
+
+    private List<POI> filter(List<POI> pois, String query) {
+        query = query.toLowerCase();
+
+        final List<POI> filteredPOIList = new ArrayList<>();
+        for (POI poi : pois) {
+            final String text = poi.getTitle().toLowerCase();
+            if (text.contains(query)) {
+                filteredPOIList.add(poi);
+            }
+        }
+        return filteredPOIList;
     }
 
     @Override
@@ -109,8 +141,59 @@ public class POIListFragment extends Fragment implements
     private class POIAdapter extends RecyclerView.Adapter<POIHolder> {
         private List<POI> mPOIs;
 
+        public POI removeItem(int position) {
+            final POI poi = mPOIs.remove(position);
+            notifyItemRemoved(position);
+            return poi;
+        }
+
+        public void addItem(int position, POI poi) {
+            mPOIs.add(position, poi);
+            notifyItemInserted(position);
+        }
+
+        public void moveItem(int fromPosition, int toPosition) {
+            final POI poi = mPOIs.remove(fromPosition);
+            mPOIs.add(toPosition, poi);
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
+        public void animateTo(List<POI> pois) {
+            applyAndAnimateRemovals(pois);
+            applyAndAnimateAdditions(pois);
+            applyAndAnimateMovedItems(pois);
+        }
+
+        private void applyAndAnimateMovedItems(List<POI> newPois) {
+            for (int toPosition = newPois.size() -1; toPosition >= 0; toPosition--) {
+                final POI poi = newPois.get(toPosition);
+                final int fromPosition = mPOIs.indexOf(poi);
+                if (fromPosition >=0 && fromPosition != toPosition) {
+                    moveItem(fromPosition, toPosition);
+                }
+            }
+        }
+
+        private void applyAndAnimateAdditions(List<POI> newPois) {
+            for (int i = 0, count = newPois.size(); i < count; i++) {
+                final POI poi = newPois.get(i);
+                if (!mPOIs.contains(poi)) {
+                    addItem(i, poi);
+                }
+            }
+        }
+
+        private void applyAndAnimateRemovals(List<POI> newPois) {
+            for (int i = mPOIs.size() - 1; i >= 0; i-- ) {
+                final POI poi = mPOIs.get(i);
+                if (!newPois.contains(poi)) {
+                    removeItem(i);
+                }
+            }
+        }
+
         public POIAdapter(List<POI> POIs) {
-            mPOIs = POIs;
+            mPOIs = new ArrayList<>(POIs);
         }
 
         @Override
@@ -139,17 +222,17 @@ public class POIListFragment extends Fragment implements
     public void updateUi() {
         //TODO:think about
         POIList poiList = POIList.getInstance(getActivity());
-        List<POI> pois = poiList.getPOIs();
+        mPOIs = poiList.getPOIs();
 
-        if (pois.isEmpty()) {
+        if (mPOIs.isEmpty()) {
             NetworkUtils.loadPois(this);
         }
 
         if (mPOIAdapter == null) {
-            mPOIAdapter = new POIAdapter(pois);
+            mPOIAdapter = new POIAdapter(mPOIs);
             mPOIRecyclerView.setAdapter(mPOIAdapter);
         } else {
-            mPOIAdapter.setPois(pois);
+            mPOIAdapter.setPois(mPOIs);
         }
     }
 

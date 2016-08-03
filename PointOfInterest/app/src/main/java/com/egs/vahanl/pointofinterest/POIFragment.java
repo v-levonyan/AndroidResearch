@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;

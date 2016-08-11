@@ -12,7 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +28,8 @@ public class CitiesFragment extends Fragment implements Callback<City> {
 
     RecyclerView mCityRecyclerView;
     CityPrefs mCityPrefs;
+    CityAdapter mCityAdapter;
+    List<City> mCities;
 
     public static Fragment newInstance() {
         return new CitiesFragment();
@@ -42,6 +47,7 @@ public class CitiesFragment extends Fragment implements Callback<City> {
         View v = inflater.inflate(R.layout.fragment_cities, container, false);
         mCityRecyclerView = (RecyclerView)v.findViewById(R.id.fragment_city_recycler_view);
         mCityRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUi();
         return v;
     }
 
@@ -69,7 +75,6 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     public void onResponse(Call<City> call, Response<City> response) {
         City city = response.body();
         mCityPrefs.setCity(city);
-        city = mCityPrefs.getCity(city.getId());
     }
 
     @Override
@@ -77,5 +82,68 @@ public class CitiesFragment extends Fragment implements Callback<City> {
         Toast.makeText(getActivity(), "ooops", Toast.LENGTH_LONG).show();
     }
 
+    private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView mCityTextView;
+        City mCity;
+
+        public CityHolder(View itemView) {
+            super(itemView);
+            mCityTextView = (TextView) itemView;
+            itemView.setOnClickListener(this);
+        }
+
+        public void bindCity(City city) {
+            mCity = city;
+            mCityTextView.setText(mCity.getName());
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+    }
+
+    private class CityAdapter extends RecyclerView.Adapter<CityHolder> {
+        private List<City> mCities;
+
+        public CityAdapter(List<City> cities) {
+            mCities = cities;
+        }
+
+        @Override
+        public CityHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            return new CityHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(CityHolder holder, int position) {
+            City city = mCities.get(position);
+            holder.bindCity(city);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mCities.size();
+        }
+
+        public void setCities(List<City> cities) {
+            mCities = cities;
+        }
+    }
+
+    private void updateUi() {
+        if (mCities == null) {
+            mCities = mCityPrefs.getCities();
+        }
+        if(mCityAdapter == null) {
+            mCityAdapter = new CityAdapter(mCities);
+            mCityRecyclerView.setAdapter(mCityAdapter);
+        } else {
+            mCityAdapter.setCities(mCities);
+        }
+
+    }
 
 }

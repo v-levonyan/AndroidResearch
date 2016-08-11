@@ -5,6 +5,12 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Created by vahanl on 8/11/16.
  */
@@ -30,8 +36,22 @@ public class CityPrefs {
     public void setCity(City city) {
         Gson gson = new Gson();
         String cityJson = gson.toJson(city);
-        String id =  "" +  city.getId(); // get storage key
+        String id = "" + city.getId(); // get storage key
         editor.putString(id, cityJson);
         editor.commit();
+    }
+
+    public List<City> getCities() {
+        List<City> cities = new ArrayList<>();
+        Map<String, ?> keys = settings.getAll();
+        Gson gson = new Gson();
+
+        for (Map.Entry<String, ?> entry : keys.entrySet()) {
+            String cityJson = (String) entry.getValue();
+            City city = gson.fromJson(cityJson, City.class);
+            cities.add(city);
+        }
+
+        return cities;
     }
 }

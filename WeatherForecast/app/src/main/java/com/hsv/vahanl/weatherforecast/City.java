@@ -39,6 +39,50 @@ public class City {
         return id;
     }
 
+    public Coord getCoord() {
+        return coord;
+    }
+
+    public List<Weather> getWeather() {
+        return weather;
+    }
+
+    public String getBase() {
+        return base;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+
+    public Wind getWind() {
+        return wind;
+    }
+
+    public Rain getRain() {
+        return rain;
+    }
+
+    public Clouds getClouds() {
+        return clouds;
+    }
+
+    public long getDt() {
+        return dt;
+    }
+
+    public Sys getSys() {
+        return sys;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCod() {
+        return cod;
+    }
+
     @Override
     public String toString() {
         return name;

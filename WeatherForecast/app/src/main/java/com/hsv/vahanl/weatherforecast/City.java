@@ -35,6 +35,10 @@ public class City {
 
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return name;

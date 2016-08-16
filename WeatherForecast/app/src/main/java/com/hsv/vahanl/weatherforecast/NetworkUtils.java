@@ -18,6 +18,7 @@ public class NetworkUtils {
 
     private static final String ENDPOIT = "http://api.openweathermap.org";
     private static final String APP_ID = "e95e864e853fe8016042752c4c1be901";
+    private static final String TYPE_CELSIUS = "metric";
 
     public static void loadCity(CitiesFragment context, String cityName) {
         Gson gson = new GsonBuilder().create();
@@ -26,7 +27,7 @@ public class NetworkUtils {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         CityApi cityApi = retrofit.create(CityApi.class);
-        Call<City> call = cityApi.getCity(cityName, APP_ID);
+        Call<City> call = cityApi.getCity(cityName, APP_ID, TYPE_CELSIUS);
 
         call.enqueue(context);
     }

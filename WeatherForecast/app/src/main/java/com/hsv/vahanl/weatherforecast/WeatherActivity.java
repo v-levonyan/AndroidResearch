@@ -3,9 +3,13 @@ package com.hsv.vahanl.weatherforecast;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 
-public class WeatherActivity extends SingleFragmentActivity {
+public class WeatherActivity extends AppCompatActivity {
 
     private static final String EXTRA_CITY_ID = "com.hsv.vahanl.weatherforecast.cityId";
 
@@ -16,14 +20,28 @@ public class WeatherActivity extends SingleFragmentActivity {
     }
 
     @Override
-    protected int getLayoutResId() {
-        return R.layout.fragment_weather;
-    }
-
-    @Override
-    public Fragment createFragment() {
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_weather);
         long cityId = getIntent().getLongExtra(EXTRA_CITY_ID, 0);
-        return WeatherFragment.newInstance(cityId);
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment locationFragment = fm.findFragmentById(R.id.location_fragment_container);
+        Fragment weatherFragment = fm.findFragmentById(R.id.weather_fragment_container);
+
+        FragmentTransaction transaction= fm.beginTransaction();
+
+        if (weatherFragment == null) {
+            weatherFragment = WeatherFragment.newInstance(cityId);
+            transaction.add(R.id.weather_fragment_container, weatherFragment);
+        }
+
+        if (locationFragment == null) {
+            locationFragment = LocationFragment.newInstance(cityId);
+            transaction.add(R.id.location_fragment_container, locationFragment);
+        }
+
+        transaction.commit();
+
     }
 }

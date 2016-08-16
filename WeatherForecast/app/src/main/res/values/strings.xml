@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
     <string name="action_search">search</string>
+    <string name="google_maps_key">AIzaSyAv_XD440suTr_gc-iES0uwtnc1AoxGVO4</string>
+
+    <string name="weather_sunny">&#xf00d;</string>
+    <string name="weather_clear_night">&#xf02e;</string>
+
+    <string name="weather_foggy">&#xf014;</string>
+    <string name="weather_cloudy">&#xf013;</string>
+    <string name="weather_rainy">&#xf019;</string>
+    <string name="weather_snowy">&#xf01b;</string>
+    <string name="weather_thunder">&#xf01e;</string>
+    <string name="weather_drizzle">&#xf01c;</string>
+
+    <string name="place_not_found">Sorry, no weather data found.</string>
+
 </resources>

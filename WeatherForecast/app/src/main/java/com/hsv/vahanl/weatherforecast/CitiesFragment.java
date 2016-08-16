@@ -1,5 +1,6 @@
 package com.hsv.vahanl.weatherforecast;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -61,6 +62,7 @@ public class CitiesFragment extends Fragment implements Callback<City> {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 NetworkUtils.loadCity(CitiesFragment.this, query);
+                searchView.clearFocus();
                 return true;
             }
 
@@ -75,6 +77,7 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     public void onResponse(Call<City> call, Response<City> response) {
         City city = response.body();
         mCityPrefs.setCity(city);
+        updateUi();
     }
 
     @Override
@@ -99,7 +102,8 @@ public class CitiesFragment extends Fragment implements Callback<City> {
 
         @Override
         public void onClick(View view) {
-
+            Intent i = WeatherActivity.newIntent(getActivity(), mCity.getId());
+            startActivity(i);
         }
     }
 
@@ -134,15 +138,15 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     }
 
     private void updateUi() {
-        if (mCities == null) {
-            mCities = mCityPrefs.getCities();
-        }
-        if(mCityAdapter == null) {
+        mCities = mCityPrefs.getCities();
+
+        if (mCityAdapter == null) {
             mCityAdapter = new CityAdapter(mCities);
             mCityRecyclerView.setAdapter(mCityAdapter);
         } else {
             mCityAdapter.setCities(mCities);
         }
+        mCityAdapter.notifyDataSetChanged();
 
     }
 

@@ -5,6 +5,7 @@ package com.hsv.vahanl.weatherforecast.data;
  */
 public class Weather {
     private int id;
+    private String main;
     private String description;
     private String icon;
 
@@ -18,5 +19,11 @@ public class Weather {
 
     public String getIcon() {
         return icon;
+    }
+
+    @Override
+    public String toString() {
+        return "main: " + main +
+                "description: " + description;
     }
 }

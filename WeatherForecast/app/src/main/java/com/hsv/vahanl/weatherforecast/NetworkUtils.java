@@ -32,4 +32,17 @@ public class NetworkUtils {
         call.enqueue(context);
     }
 
+    public static void loadCityForecast(WeatherForecastActivity context, String cityName, int count) {
+        Gson gson = new GsonBuilder().create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ENDPOIT)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        CityForecastApi cityForecastApi = retrofit.create(CityForecastApi.class);
+        Call<CityForecast> call = cityForecastApi
+                .getCityForecast(cityName, APP_ID, TYPE_CELSIUS, count);
+
+        call.enqueue(context);
+    }
+
 }

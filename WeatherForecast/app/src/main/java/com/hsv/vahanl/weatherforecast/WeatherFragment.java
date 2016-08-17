@@ -1,6 +1,7 @@
 package com.hsv.vahanl.weatherforecast;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,8 +24,7 @@ import java.util.Date;
 public class WeatherFragment extends Fragment {
 
     private static final String ARG_CITY_ID = "argsCityId";
-
-    Typeface weatherFont;
+    public static final String EXTRA_CITY_NAME = "com.hsv.vahanl.weatherforecast.cityName";
 
     TextView mCityField;
     TextView mUpdatedField;
@@ -47,7 +47,6 @@ public class WeatherFragment extends Fragment {
         long cityId = getArguments().getLong(ARG_CITY_ID);
         CityPrefs cityPrefs = new CityPrefs(getActivity().getApplicationContext());
         mCity = cityPrefs.getCity(cityId);
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
     }
 
     @Override
@@ -55,6 +54,14 @@ public class WeatherFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
         mCityField = (TextView) v.findViewById(R.id.city_field);
         mCityField.setText(mCity.getName());
+        mCityField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), WeatherForecastActivity.class);
+                i.putExtra(EXTRA_CITY_NAME, mCity.getName());
+                startActivity(i);
+            }
+        });
         mUpdatedField = (TextView) v.findViewById(R.id.updated_field);
         DateFormat df = DateFormat.getDateTimeInstance();
         String updatedOn = df.format(new Date(mCity.getDt() * 1000));

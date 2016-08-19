@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.activities;
 
 
 import android.content.Context;
@@ -8,6 +8,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+
+import com.hsv.vahanl.weatherforecast.fragments.LocationFragment;
+import com.hsv.vahanl.weatherforecast.R;
+import com.hsv.vahanl.weatherforecast.fragments.WeatherFragment;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -32,7 +36,7 @@ public class WeatherActivity extends AppCompatActivity {
         FragmentTransaction transaction= fm.beginTransaction();
 
         if (weatherFragment == null) {
-            weatherFragment = WeatherFragment.newInstance(cityId);
+            weatherFragment = new WeatherFragment().newInstance(cityId);
             transaction.add(R.id.weather_fragment_container, weatherFragment);
         }
 

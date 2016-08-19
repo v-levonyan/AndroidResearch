@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.utilities;
 
 import android.content.Context;
 import android.graphics.Bitmap;

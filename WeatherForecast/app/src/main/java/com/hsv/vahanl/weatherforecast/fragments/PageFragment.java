@@ -1,18 +1,18 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hsv.vahanl.weatherforecast.data.CityForecast;
+import com.hsv.vahanl.weatherforecast.database.CityForecastPrefs;
+import com.hsv.vahanl.weatherforecast.data.DailyForecast;
+import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.data.Weather;
-
-import java.util.List;
 
 /**
  * Created by vahanl on 8/17/16.

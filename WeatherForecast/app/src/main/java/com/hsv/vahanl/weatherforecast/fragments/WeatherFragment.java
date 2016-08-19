@@ -1,19 +1,17 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.hsv.vahanl.weatherforecast.R;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -21,9 +19,8 @@ import java.util.Date;
 /**
  * Created by vahanl on 8/16/16.
  */
-public class WeatherFragment extends Fragment {
+public class WeatherFragment extends CustomFragment {
 
-    private static final String ARG_CITY_ID = "argsCityId";
     public static final String EXTRA_CITY_NAME = "com.hsv.vahanl.weatherforecast.cityName";
 
     TextView mCityField;
@@ -31,22 +28,10 @@ public class WeatherFragment extends Fragment {
     TextView mDetailsField;
     TextView mCurrentTemperatureField;
     ImageView mWeatherIcon;
-    City mCity;
-
-    public static WeatherFragment newInstance(long cityId) {
-        Bundle args = new Bundle();
-        args.putLong(ARG_CITY_ID, cityId);
-        WeatherFragment fragment = new WeatherFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        long cityId = getArguments().getLong(ARG_CITY_ID);
-        CityPrefs cityPrefs = new CityPrefs(getActivity().getApplicationContext());
-        mCity = cityPrefs.getCity(cityId);
+    public Fragment createFragment() {
+        return new WeatherFragment();
     }
 
     @Override
@@ -57,9 +42,13 @@ public class WeatherFragment extends Fragment {
         mCityField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(), WeatherForecastActivity.class);
-                i.putExtra(EXTRA_CITY_NAME, mCity.getName());
-                startActivity(i);
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction= fm.beginTransaction();
+                Fragment weatherForecastFragment =
+                        new WeatherForecastFragment().newInstance(mCity.getId());
+                transaction.replace(R.id.weather_fragment_container, weatherForecastFragment);
+                transaction.commit();
+
             }
         });
         mUpdatedField = (TextView) v.findViewById(R.id.updated_field);

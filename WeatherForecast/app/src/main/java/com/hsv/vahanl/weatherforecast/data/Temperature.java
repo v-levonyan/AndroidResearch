@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.data;
 
 /**
  * Created by vahanl on 8/17/16.

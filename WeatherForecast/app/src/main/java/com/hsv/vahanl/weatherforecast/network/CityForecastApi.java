@@ -1,4 +1,6 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.network;
+
+import com.hsv.vahanl.weatherforecast.data.CityForecast;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

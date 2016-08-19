@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.data;
 
 import com.hsv.vahanl.weatherforecast.data.Clouds;
 import com.hsv.vahanl.weatherforecast.data.Coord;

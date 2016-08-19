@@ -1,13 +1,13 @@
-package com.hsv.vahanl.weatherforecast;
-
-import android.app.Fragment;
-import android.content.Context;
+package com.hsv.vahanl.weatherforecast.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hsv.vahanl.weatherforecast.data.City;
+import com.hsv.vahanl.weatherforecast.data.CityForecast;
+import com.hsv.vahanl.weatherforecast.fragments.CitiesFragment;
+import com.hsv.vahanl.weatherforecast.fragments.WeatherForecastFragment;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -32,7 +32,7 @@ public class NetworkUtils {
         call.enqueue(context);
     }
 
-    public static void loadCityForecast(WeatherForecastActivity context, String cityName, int count) {
+    public static void loadCityForecast(WeatherForecastFragment context, String cityName, int count) {
         Gson gson = new GsonBuilder().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOIT)

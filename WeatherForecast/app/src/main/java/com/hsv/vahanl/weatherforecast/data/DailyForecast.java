@@ -1,5 +1,6 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.data;
 
+import com.hsv.vahanl.weatherforecast.data.Temperature;
 import com.hsv.vahanl.weatherforecast.data.Weather;
 
 import java.util.List;

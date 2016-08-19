@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hsv.vahanl.weatherforecast.data.City;
+import com.hsv.vahanl.weatherforecast.database.CityPrefs;
+import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
+import com.hsv.vahanl.weatherforecast.R;
+import com.hsv.vahanl.weatherforecast.activities.WeatherActivity;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.hsv.vahanl.weatherforecast;
+package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.os.Bundle;
 
@@ -10,6 +10,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hsv.vahanl.weatherforecast.data.City;
+import com.hsv.vahanl.weatherforecast.database.CityPrefs;
 
 /**
  * Created by vahanl on 8/12/16.

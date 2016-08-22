@@ -1,53 +1,55 @@
 package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.data.City;
 import com.hsv.vahanl.weatherforecast.database.CityPrefs;
+
+import io.realm.Realm;
 
 /**
  * Created by vahanl on 8/12/16.
  */
-public class LocationFragment extends SupportMapFragment {
+public class LocationFragment extends CustomFragment implements OnMapReadyCallback {
 
-    private static final String ARG_CITY_ID = "argsCityId";
     private GoogleMap mGoogleMap;
-    private City mCity;
+    private MapView mGoogleMapView;
 
-
-
-    public static LocationFragment newInstance(long cityId) {
-        Bundle args = new Bundle();
-        args.putLong(ARG_CITY_ID, cityId);
-        LocationFragment fragment = new LocationFragment();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public Fragment createFragment() {
+        return new LocationFragment();
     }
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        long cityId = getArguments().getLong(ARG_CITY_ID);
-        CityPrefs cityPrefs = new CityPrefs(getActivity().getApplicationContext());
-        mCity = cityPrefs.getCity(cityId);
-        getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mGoogleMap = googleMap;
-                updateUI();
-            }
-        });
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.view_map, container, false);
+        mGoogleMapView = (MapView) v.findViewById(R.id.viewMap);
+        mGoogleMapView.onCreate(savedInstanceState);
+        mGoogleMapView.onResume();
+        mGoogleMapView.getMapAsync(this);
+        return v;
     }
-
-
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        updateUI();
+    }
 
     private void updateUI() {
         if (mGoogleMap == null) {
@@ -65,4 +67,6 @@ public class LocationFragment extends SupportMapFragment {
         CameraUpdate update = CameraUpdateFactory.newLatLng(cityPoint);
         mGoogleMap.animateCamera(update);
     }
+
+
 }

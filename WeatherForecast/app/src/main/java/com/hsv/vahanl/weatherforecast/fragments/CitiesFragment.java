@@ -7,6 +7,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,9 @@ import com.hsv.vahanl.weatherforecast.activities.WeatherActivity;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,10 +37,13 @@ import retrofit2.Response;
  */
 public class CitiesFragment extends Fragment implements Callback<City> {
 
+    private static final String TAG = "CitiesFragment";
     RecyclerView mCityRecyclerView;
     CityPrefs mCityPrefs;
     CityAdapter mCityAdapter;
-    List<City> mCities;
+    RealmResults<City> mCities;
+
+    private Realm mRealm;
 
     public static Fragment newInstance() {
         return new CitiesFragment();
@@ -45,9 +52,11 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCityPrefs = new CityPrefs(getActivity().getApplicationContext());
+//        mCityPrefs = new CityPrefs(getActivity().getApplicationContext());
         setHasOptionsMenu(true);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +65,20 @@ public class CitiesFragment extends Fragment implements Callback<City> {
         mCityRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUi();
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mRealm = Realm.getDefaultInstance();
+        mCities = mRealm.where(City.class).findAll();
+        updateUi();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mRealm.close();
     }
 
     @Override
@@ -82,7 +105,10 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     @Override
     public void onResponse(Call<City> call, Response<City> response) {
         City city = response.body();
-        mCityPrefs.setCity(city);
+//        mCityPrefs.setCity(city);
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(city);
+        mRealm.commitTransaction();
         updateUi();
     }
 
@@ -114,9 +140,9 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     }
 
     private class CityAdapter extends RecyclerView.Adapter<CityHolder> {
-        private List<City> mCities;
+        private RealmResults<City> mCities;
 
-        public CityAdapter(List<City> cities) {
+        public CityAdapter(RealmResults<City> cities) {
             mCities = cities;
         }
 
@@ -135,24 +161,29 @@ public class CitiesFragment extends Fragment implements Callback<City> {
 
         @Override
         public int getItemCount() {
-            return mCities.size();
+
+            Log.i(TAG, "getItemCount");
+            if (mCities.isValid()) {
+                return mCities.size();
+            }
+            return 0;
         }
 
-        public void setCities(List<City> cities) {
+        public void setCities(RealmResults<City> cities) {
             mCities = cities;
         }
     }
 
     private void updateUi() {
-        mCities = mCityPrefs.getCities();
-
-        if (mCityAdapter == null) {
-            mCityAdapter = new CityAdapter(mCities);
-            mCityRecyclerView.setAdapter(mCityAdapter);
-        } else {
-            mCityAdapter.setCities(mCities);
+        if (mCities != null) {
+            if (mCityAdapter == null) {
+                mCityAdapter = new CityAdapter(mCities);
+                mCityRecyclerView.setAdapter(mCityAdapter);
+            } else {
+                mCityAdapter.setCities(mCities);
+            }
+            mCityAdapter.notifyDataSetChanged();
         }
-        mCityAdapter.notifyDataSetChanged();
 
     }
 

@@ -16,6 +16,8 @@ import com.hsv.vahanl.weatherforecast.data.CityForecast;
 import com.hsv.vahanl.weatherforecast.database.CityForecastPrefs;
 import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
 
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,12 +55,14 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     @Override
     public void onResponse(Call<CityForecast> call, Response<CityForecast> response) {
         mCityForecast = response.body();
-        CityForecastPrefs cityForecastPrefs = new CityForecastPrefs(getActivity().getApplicationContext());
-        cityForecastPrefs.setCityForecast(mCityForecast);
+//TODO: set primary key
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(mCityForecast);
+        mRealm.commitTransaction();
         mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
                 .getSupportFragmentManager(),
                 getActivity(),
-                mCityForecast.getCity().getId()));
+                mCityForecast));
 
         mTabLayout.setupWithViewPager(mViewPager);
 

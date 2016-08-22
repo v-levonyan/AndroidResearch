@@ -1,22 +1,16 @@
 package com.hsv.vahanl.weatherforecast.data;
 
-import com.hsv.vahanl.weatherforecast.data.City;
-import com.hsv.vahanl.weatherforecast.data.DailyForecast;
-
 import java.util.List;
 
-/**
- * Created by vahanl on 8/17/16.
- */
-public class CityForecast {
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+public class CityForecast extends RealmObject {
     private City city;
-    private List<DailyForecast> list;
+    private RealmList<DailyForecast> list;
 
-    public City getCity() {
-        return city;
-    }
-
-    public List<DailyForecast> getList() {
-        return list;
-    }
 }

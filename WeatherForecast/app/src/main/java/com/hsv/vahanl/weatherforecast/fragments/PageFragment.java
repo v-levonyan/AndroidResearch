@@ -14,6 +14,8 @@ import com.hsv.vahanl.weatherforecast.data.DailyForecast;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.data.Weather;
 
+import io.realm.Realm;
+
 /**
  * Created by vahanl on 8/17/16.
  */
@@ -38,9 +40,13 @@ public class PageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         long cityId = getArguments().getLong(ARG_CITY_ID);
-        CityForecastPrefs cityForecastPrefs = new CityForecastPrefs(getActivity()
-                .getApplicationContext());
-        mCityForecast = cityForecastPrefs.getCity(cityId);
+//        CityForecastPrefs cityForecastPrefs = new CityForecastPrefs(getActivity()
+//                .getApplicationContext());
+//        mCityForecast = cityForecastPrefs.getCity(cityId);
+        mCityForecast = Realm.getDefaultInstance()
+                .where(CityForecast.class)
+                .equalTo("id", cityId)
+                .findFirst();
         int pageCount = mCityForecast.getList().size();
         mPage = getArguments().getInt(ARG_PAGE) == pageCount ? pageCount - 1 : getArguments().getInt(ARG_PAGE);
     }
@@ -79,5 +85,11 @@ public class PageFragment extends Fragment {
         weatherDetailsTextView.setText(weatherDetails);
 
        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Realm.getDefaultInstance().close();
     }
 }

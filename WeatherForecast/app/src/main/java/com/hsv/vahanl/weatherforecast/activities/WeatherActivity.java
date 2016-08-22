@@ -41,7 +41,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
 
         if (locationFragment == null) {
-            locationFragment = LocationFragment.newInstance(cityId);
+            locationFragment = new LocationFragment().newInstance(cityId);
             transaction.add(R.id.location_fragment_container, locationFragment);
         }
 

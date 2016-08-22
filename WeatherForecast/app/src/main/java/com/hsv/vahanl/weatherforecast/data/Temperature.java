@@ -1,39 +1,16 @@
 package com.hsv.vahanl.weatherforecast.data;
 
-/**
- * Created by vahanl on 8/17/16.
- */
-public class Temperature {
+import io.realm.RealmObject;
+import lombok.Getter;
+
+@Getter
+public class Temperature extends RealmObject {
     private float day;
     private float min;
     private float max;
     private float night;
     private float eve;
     private float morn;
-
-    public float getDay() {
-        return day;
-    }
-
-    public float getMin() {
-        return min;
-    }
-
-    public float getMax() {
-        return max;
-    }
-
-    public float getNight() {
-        return night;
-    }
-
-    public float getEve() {
-        return eve;
-    }
-
-    public float getMorn() {
-        return morn;
-    }
 
     @Override
     public String toString() {

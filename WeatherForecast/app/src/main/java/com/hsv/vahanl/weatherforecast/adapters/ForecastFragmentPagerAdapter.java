@@ -27,14 +27,11 @@ public class ForecastFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     public ForecastFragmentPagerAdapter(FragmentManager fm,
                                         Context context,
-                                        long cityId) {
+                                        CityForecast cityForecast) {
         super(fm);
         mContext = context;
-        mCityId = cityId;
-        CityForecastPrefs cityForecastPrefs = new CityForecastPrefs(mContext);
-        mCityForecast = cityForecastPrefs.getCity(cityId);
+        mCityForecast = cityForecast;
         setTitles();
-
     }
 
     @Override
@@ -44,7 +41,7 @@ public class ForecastFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position, mCityId);
+        return PageFragment.newInstance(position, mCityForecast.getCity().getId());
     }
 
     @Override

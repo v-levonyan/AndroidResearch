@@ -4,15 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.hsv.vahanl.weatherforecast.data.City;
-import com.hsv.vahanl.weatherforecast.database.CityPrefs;
+
+import io.realm.Realm;
 
 /**
  * Created by vahanl on 8/19/16.
  */
 public abstract class CustomFragment extends Fragment {
     private static final String ARG_CITY_ID = "argsCityId";
+    private static final String TAG = "CustomFragment";
 
     protected City mCity;
+    protected Realm mRealm;
 
     public abstract Fragment createFragment();
 
@@ -28,8 +31,13 @@ public abstract class CustomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         long cityId = getArguments().getLong(ARG_CITY_ID);
-        CityPrefs cityPrefs = new CityPrefs(getActivity().getApplicationContext());
-        mCity = cityPrefs.getCity(cityId);
+        mRealm = Realm.getDefaultInstance();
+        mCity = mRealm.where(City.class).equalTo("id", cityId).findFirst();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealm.close();
+    }
 }

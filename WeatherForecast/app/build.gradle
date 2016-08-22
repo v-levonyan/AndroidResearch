@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 23
@@ -33,4 +34,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.4.0'
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
+    compile 'org.projectlombok:lombok:1.16.10'
 }

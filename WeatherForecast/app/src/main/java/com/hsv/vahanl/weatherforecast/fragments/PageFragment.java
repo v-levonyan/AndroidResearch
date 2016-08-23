@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hsv.vahanl.weatherforecast.data.CityForecast;
-import com.hsv.vahanl.weatherforecast.database.CityForecastPrefs;
 import com.hsv.vahanl.weatherforecast.data.DailyForecast;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.data.Weather;
+import com.hsv.vahanl.weatherforecast.utilities.DBHelper;
 
 import io.realm.Realm;
 
@@ -40,13 +40,9 @@ public class PageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         long cityId = getArguments().getLong(ARG_CITY_ID);
-//        CityForecastPrefs cityForecastPrefs = new CityForecastPrefs(getActivity()
-//                .getApplicationContext());
-//        mCityForecast = cityForecastPrefs.getCity(cityId);
-        mCityForecast = Realm.getDefaultInstance()
-                .where(CityForecast.class)
-                .equalTo("id", cityId)
-                .findFirst();
+
+        mCityForecast = DBHelper.getForecastById(cityId);
+
         int pageCount = mCityForecast.getList().size();
         mPage = getArguments().getInt(ARG_PAGE) == pageCount ? pageCount - 1 : getArguments().getInt(ARG_PAGE);
     }

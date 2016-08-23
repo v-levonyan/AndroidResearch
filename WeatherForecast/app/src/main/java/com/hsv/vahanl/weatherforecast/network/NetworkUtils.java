@@ -2,7 +2,7 @@ package com.hsv.vahanl.weatherforecast.network;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.hsv.vahanl.weatherforecast.data.City;
+import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
 import com.hsv.vahanl.weatherforecast.data.CityForecast;
 import com.hsv.vahanl.weatherforecast.fragments.CitiesFragment;
 import com.hsv.vahanl.weatherforecast.fragments.WeatherForecastFragment;
@@ -27,7 +27,7 @@ public class NetworkUtils {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         CityApi cityApi = retrofit.create(CityApi.class);
-        Call<City> call = cityApi.getCity(cityName, APP_ID, TYPE_CELSIUS);
+        Call<CityCurrentWeatherInfo> call = cityApi.getCity(cityName, APP_ID, TYPE_CELSIUS);
 
         call.enqueue(context);
     }

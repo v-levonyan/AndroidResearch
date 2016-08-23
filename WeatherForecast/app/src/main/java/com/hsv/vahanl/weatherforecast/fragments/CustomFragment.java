@@ -3,7 +3,8 @@ package com.hsv.vahanl.weatherforecast.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.hsv.vahanl.weatherforecast.data.City;
+import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
+import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
 
 import io.realm.Realm;
 
@@ -14,7 +15,7 @@ public abstract class CustomFragment extends Fragment {
     private static final String ARG_CITY_ID = "argsCityId";
     private static final String TAG = "CustomFragment";
 
-    protected City mCity;
+    protected CityCurrentWeatherInfo mCityCurrentWeatherInfo;
     protected Realm mRealm;
 
     public abstract Fragment createFragment();
@@ -32,7 +33,7 @@ public abstract class CustomFragment extends Fragment {
         super.onCreate(savedInstanceState);
         long cityId = getArguments().getLong(ARG_CITY_ID);
         mRealm = Realm.getDefaultInstance();
-        mCity = mRealm.where(City.class).equalTo("id", cityId).findFirst();
+        mCityCurrentWeatherInfo = mRealm.where(CityCurrentWeatherInfo.class).equalTo("id", cityId).findFirst();
     }
 
     @Override

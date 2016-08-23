@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +13,6 @@ import lombok.Setter;
 public class CityForecast extends RealmObject {
     private City city;
     private RealmList<DailyForecast> list;
+
 
 }

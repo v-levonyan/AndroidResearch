@@ -38,14 +38,14 @@ public class WeatherFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
         mCityField = (TextView) v.findViewById(R.id.city_field);
-        mCityField.setText(mCity.getName());
+        mCityField.setText(mCityCurrentWeatherInfo.getName());
         mCityField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 FragmentTransaction transaction= fm.beginTransaction();
                 Fragment weatherForecastFragment =
-                        new WeatherForecastFragment().newInstance(mCity.getId());
+                        new WeatherForecastFragment().newInstance(mCityCurrentWeatherInfo.getId());
                 transaction.replace(R.id.weather_fragment_container, weatherForecastFragment);
                 transaction.commit();
 
@@ -53,21 +53,21 @@ public class WeatherFragment extends CustomFragment {
         });
         mUpdatedField = (TextView) v.findViewById(R.id.updated_field);
         DateFormat df = DateFormat.getDateTimeInstance();
-        String updatedOn = df.format(new Date(mCity.getDt() * 1000));
+        String updatedOn = df.format(new Date(mCityCurrentWeatherInfo.getDt() * 1000));
         mUpdatedField.setText(updatedOn);
         mDetailsField = (TextView) v.findViewById(R.id.details_field);
-        String description = mCity.getWeather().get(0).getDescription();
-        String humidity = String.valueOf(mCity.getMain().getHumidity());
-        String pressure = String.valueOf(mCity.getMain().getPressure());
+        String description = mCityCurrentWeatherInfo.getWeather().get(0).getDescription();
+        String humidity = String.valueOf(mCityCurrentWeatherInfo.getMain().getHumidity());
+        String pressure = String.valueOf(mCityCurrentWeatherInfo.getMain().getPressure());
         mDetailsField.setText(description + "/n"
                 + "Humidity: " + humidity + " %"
                 + "Pressure: " + pressure + " hPa");
         mCurrentTemperatureField = (TextView) v.findViewById(R.id.current_temperature_field);
-        String temperature = String.format("%.2f", mCity.getMain().getTemp()) + " C";
+        String temperature = String.format("%.2f", mCityCurrentWeatherInfo.getMain().getTemp()) + " C";
         mCurrentTemperatureField.setText(temperature);
         mWeatherIcon = (ImageView) v.findViewById(R.id.weather_icon);
 
-        String iconName ="_" + mCity.getWeather().get(0).getIcon();
+        String iconName ="_" + mCityCurrentWeatherInfo.getWeather().get(0).getIcon();
 
         Context context = mWeatherIcon.getContext();
         int iconId = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());

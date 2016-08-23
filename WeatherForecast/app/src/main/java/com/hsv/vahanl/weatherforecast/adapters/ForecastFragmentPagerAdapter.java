@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.hsv.vahanl.weatherforecast.data.CityForecast;
 import com.hsv.vahanl.weatherforecast.data.DailyForecast;
-import com.hsv.vahanl.weatherforecast.database.CityForecastPrefs;
 import com.hsv.vahanl.weatherforecast.fragments.PageFragment;
 
 import java.text.DateFormat;

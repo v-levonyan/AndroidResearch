@@ -1,7 +1,6 @@
 package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hsv.vahanl.weatherforecast.R;
-import com.hsv.vahanl.weatherforecast.data.City;
-import com.hsv.vahanl.weatherforecast.database.CityPrefs;
-
-import io.realm.Realm;
 
 /**
  * Created by vahanl on 8/12/16.
@@ -55,7 +49,7 @@ public class LocationFragment extends CustomFragment implements OnMapReadyCallba
         if (mGoogleMap == null) {
             return;
         }
-        LatLng cityPoint = new LatLng(mCity.getCoord().getLat(), mCity.getCoord().getLon());
+        LatLng cityPoint = new LatLng(mCityCurrentWeatherInfo.getCoord().getLat(), mCityCurrentWeatherInfo.getCoord().getLon());
 
         MarkerOptions cityMarker = new MarkerOptions().position(cityPoint);
         mGoogleMap.clear();

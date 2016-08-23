@@ -1,7 +1,6 @@
 package com.hsv.vahanl.weatherforecast.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,11 +12,9 @@ import android.widget.Toast;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.adapters.ForecastFragmentPagerAdapter;
 import com.hsv.vahanl.weatherforecast.data.CityForecast;
-import com.hsv.vahanl.weatherforecast.database.CityForecastPrefs;
 import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
+import com.hsv.vahanl.weatherforecast.utilities.DBHelper;
 
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +36,7 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkUtils.loadCityForecast(this, mCity.getName(), 10);
+        NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), 10);
 
     }
 
@@ -56,9 +53,12 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     public void onResponse(Call<CityForecast> call, Response<CityForecast> response) {
         mCityForecast = response.body();
 //TODO: set primary key
-        mRealm.beginTransaction();
-        mRealm.copyToRealmOrUpdate(mCityForecast);
-        mRealm.commitTransaction();
+        CityForecast cityForecast = DBHelper.getForecastById(mCityForecast.getCity().getId());
+        if (cityForecast == null) {
+            mRealm.beginTransaction();
+            mRealm.copyToRealm(mCityForecast);
+            mRealm.commitTransaction();
+        }
         mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
                 .getSupportFragmentManager(),
                 getActivity(),

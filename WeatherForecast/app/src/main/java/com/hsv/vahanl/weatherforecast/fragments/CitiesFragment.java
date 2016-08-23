@@ -17,16 +17,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hsv.vahanl.weatherforecast.data.City;
-import com.hsv.vahanl.weatherforecast.database.CityPrefs;
+import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
 import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.activities.WeatherActivity;
 
-import java.util.List;
-
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,13 +31,12 @@ import retrofit2.Response;
 /**
  * Created by vahanl on 8/10/16.
  */
-public class CitiesFragment extends Fragment implements Callback<City> {
+public class CitiesFragment extends Fragment implements Callback<CityCurrentWeatherInfo> {
 
     private static final String TAG = "CitiesFragment";
     RecyclerView mCityRecyclerView;
-    CityPrefs mCityPrefs;
     CityAdapter mCityAdapter;
-    RealmResults<City> mCities;
+    RealmResults<CityCurrentWeatherInfo> mCities;
 
     private Realm mRealm;
 
@@ -52,7 +47,6 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mCityPrefs = new CityPrefs(getActivity().getApplicationContext());
         setHasOptionsMenu(true);
     }
 
@@ -71,7 +65,7 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     public void onStart() {
         super.onStart();
         mRealm = Realm.getDefaultInstance();
-        mCities = mRealm.where(City.class).findAll();
+        mCities = mRealm.where(CityCurrentWeatherInfo.class).findAll();
         updateUi();
     }
 
@@ -103,23 +97,23 @@ public class CitiesFragment extends Fragment implements Callback<City> {
     }
 
     @Override
-    public void onResponse(Call<City> call, Response<City> response) {
-        City city = response.body();
+    public void onResponse(Call<CityCurrentWeatherInfo> call, Response<CityCurrentWeatherInfo> response) {
+        CityCurrentWeatherInfo cityCurrentWeatherInfo = response.body();
 //        mCityPrefs.setCity(city);
         mRealm.beginTransaction();
-        mRealm.copyToRealmOrUpdate(city);
+        mRealm.copyToRealmOrUpdate(cityCurrentWeatherInfo);
         mRealm.commitTransaction();
         updateUi();
     }
 
     @Override
-    public void onFailure(Call<City> call, Throwable t) {
+    public void onFailure(Call<CityCurrentWeatherInfo> call, Throwable t) {
         Toast.makeText(getActivity(), "ooops", Toast.LENGTH_LONG).show();
     }
 
     private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView mCityTextView;
-        City mCity;
+        CityCurrentWeatherInfo mCityCurrentWeatherInfo;
 
         public CityHolder(View itemView) {
             super(itemView);
@@ -127,22 +121,22 @@ public class CitiesFragment extends Fragment implements Callback<City> {
             itemView.setOnClickListener(this);
         }
 
-        public void bindCity(City city) {
-            mCity = city;
-            mCityTextView.setText(mCity.getName());
+        public void bindCity(CityCurrentWeatherInfo cityCurrentWeatherInfo) {
+            mCityCurrentWeatherInfo = cityCurrentWeatherInfo;
+            mCityTextView.setText(mCityCurrentWeatherInfo.getName());
         }
 
         @Override
         public void onClick(View view) {
-            Intent i = WeatherActivity.newIntent(getActivity(), mCity.getId());
+            Intent i = WeatherActivity.newIntent(getActivity(), mCityCurrentWeatherInfo.getId());
             startActivity(i);
         }
     }
 
     private class CityAdapter extends RecyclerView.Adapter<CityHolder> {
-        private RealmResults<City> mCities;
+        private RealmResults<CityCurrentWeatherInfo> mCities;
 
-        public CityAdapter(RealmResults<City> cities) {
+        public CityAdapter(RealmResults<CityCurrentWeatherInfo> cities) {
             mCities = cities;
         }
 
@@ -155,8 +149,8 @@ public class CitiesFragment extends Fragment implements Callback<City> {
 
         @Override
         public void onBindViewHolder(CityHolder holder, int position) {
-            City city = mCities.get(position);
-            holder.bindCity(city);
+            CityCurrentWeatherInfo cityCurrentWeatherInfo = mCities.get(position);
+            holder.bindCity(cityCurrentWeatherInfo);
         }
 
         @Override
@@ -169,7 +163,7 @@ public class CitiesFragment extends Fragment implements Callback<City> {
             return 0;
         }
 
-        public void setCities(RealmResults<City> cities) {
+        public void setCities(RealmResults<CityCurrentWeatherInfo> cities) {
             mCities = cities;
         }
     }
@@ -186,5 +180,4 @@ public class CitiesFragment extends Fragment implements Callback<City> {
         }
 
     }
-
 }

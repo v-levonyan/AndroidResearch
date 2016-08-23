@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -110,7 +111,8 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         Toast.makeText(getActivity(), "ooops", Toast.LENGTH_LONG).show();
     }
 
-    private class CityHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class CityHolder extends RecyclerView.ViewHolder
+            implements View.OnTouchListener, View.OnClickListener {
         TextView mCityTextView;
         CityCurrentWeatherInfo mCityCurrentWeatherInfo;
 
@@ -118,6 +120,7 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
             super(itemView);
             mCityTextView = (TextView) itemView;
             itemView.setOnClickListener(this);
+            itemView.setOnTouchListener(this);
         }
 
         public void bindCity(CityCurrentWeatherInfo cityCurrentWeatherInfo) {
@@ -129,6 +132,34 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         public void onClick(View view) {
             Intent i = WeatherActivity.newIntent(getActivity(), mCityCurrentWeatherInfo.getId());
             startActivity(i);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent motionEvent) {
+
+            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+
+                case MotionEvent.ACTION_DOWN:
+                    v.setPressed(true);
+                    // Start action ...
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_OUTSIDE:
+                    Toast.makeText(getActivity(), "ACTION_OUTSIDE", Toast.LENGTH_SHORT).show();
+
+                case MotionEvent.ACTION_CANCEL:
+                    v.setPressed(false);
+                    // Stop action ...
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    break;
+            }
+
+            return true;
         }
     }
 
@@ -160,6 +191,11 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
                 return mCities.size();
             }
             return 0;
+        }
+
+        public void deleteItem(int position) {
+            mCities.deleteFromRealm(position);
+            notifyItemRemoved(position);
         }
 
         public void setCities(RealmResults<CityCurrentWeatherInfo> cities) {

@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">WeatherForecast</string>
     <string name="action_search">search</string>
-    <string name="google_maps_key">AIzaSyAv_XD440suTr_gc-iES0uwtnc1AoxGVO4</string>
+    <string name="google_search_key">AIzaSyAC65c5FAeG-OcnPXhYIcCOg0rLQCG_KJE</string>
+    <string name="google_map_key">AIzaSyAv_XD440suTr_gc-iES0uwtnc1AoxGVO4</string>
+
+
 
     <string name="weather_sunny">&#xf00d;</string>
     <string name="weather_clear_night">&#xf02e;</string>

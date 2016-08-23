@@ -47,15 +47,14 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
-
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_cities, container, false);
-        mCityRecyclerView = (RecyclerView)v.findViewById(R.id.fragment_city_recycler_view);
+        mCityRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_city_recycler_view);
         mCityRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         updateUi();
         return v;
@@ -75,26 +74,26 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         mRealm.close();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_city, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                NetworkUtils.loadCity(CitiesFragment.this, query);
-                searchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                return false;
-            }
-        });
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.menu_city, menu);
+//        final MenuItem searchItem = menu.findItem(R.id.action_search);
+//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                NetworkUtils.loadCity(CitiesFragment.this, query);
+//                searchView.clearFocus();
+//                return true;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String query) {
+//                return false;
+//            }
+//        });
+//    }
 
     @Override
     public void onResponse(Call<CityCurrentWeatherInfo> call, Response<CityCurrentWeatherInfo> response) {

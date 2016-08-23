@@ -5,24 +5,29 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".MyApp">
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.map.API_KEY"
+            android:value="@string/google_map_key" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_search_key" />
 
-        <activity android:name=".activities.CitiesActivity">
+
+        <activity android:name=".activities.WeatherActivity" />
+        <activity android:name=".activities.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.WeatherActivity"></activity>
     </application>
 
 </manifest>

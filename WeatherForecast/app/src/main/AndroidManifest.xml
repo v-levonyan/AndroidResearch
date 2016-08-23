@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_search_key" />
+            android:value="@string/google_search_key2" />
 
 
         <activity android:name=".activities.WeatherActivity" />

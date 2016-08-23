@@ -29,9 +29,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by vahanl on 8/10/16.
- */
 public class CitiesFragment extends Fragment implements Callback<CityCurrentWeatherInfo> {
 
     private static final String TAG = "CitiesFragment";
@@ -48,7 +45,6 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
     }
 
 
@@ -75,31 +71,10 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         mRealm.close();
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        inflater.inflate(R.menu.menu_city, menu);
-//        final MenuItem searchItem = menu.findItem(R.id.action_search);
-//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                NetworkUtils.loadCity(CitiesFragment.this, query);
-//                searchView.clearFocus();
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String query) {
-//                return false;
-//            }
-//        });
-//    }
 
     @Override
     public void onResponse(Call<CityCurrentWeatherInfo> call, Response<CityCurrentWeatherInfo> response) {
         CityCurrentWeatherInfo cityCurrentWeatherInfo = response.body();
-//        mCityPrefs.setCity(city);
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(cityCurrentWeatherInfo);
         mRealm.commitTransaction();
@@ -112,7 +87,7 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
     }
 
     private class CityHolder extends RecyclerView.ViewHolder
-            implements View.OnTouchListener, View.OnClickListener {
+            implements View.OnClickListener, View.OnLongClickListener {
         TextView mCityTextView;
         CityCurrentWeatherInfo mCityCurrentWeatherInfo;
 
@@ -120,7 +95,7 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
             super(itemView);
             mCityTextView = (TextView) itemView;
             itemView.setOnClickListener(this);
-            itemView.setOnTouchListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         public void bindCity(CityCurrentWeatherInfo cityCurrentWeatherInfo) {
@@ -135,30 +110,9 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         }
 
         @Override
-        public boolean onTouch(View v, MotionEvent motionEvent) {
-
-            switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-
-                case MotionEvent.ACTION_DOWN:
-                    v.setPressed(true);
-                    // Start action ...
-                    break;
-                case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_OUTSIDE:
-                    Toast.makeText(getActivity(), "ACTION_OUTSIDE", Toast.LENGTH_SHORT).show();
-
-                case MotionEvent.ACTION_CANCEL:
-                    v.setPressed(false);
-                    // Stop action ...
-                    break;
-                case MotionEvent.ACTION_POINTER_DOWN:
-                    break;
-                case MotionEvent.ACTION_POINTER_UP:
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    break;
-            }
-
+        public boolean onLongClick(View v) {
+            mCityAdapter.deleteItem(getAdapterPosition());
+            Toast.makeText(getActivity(), "onLongClick", Toast.LENGTH_SHORT).show();
             return true;
         }
     }
@@ -194,7 +148,9 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         }
 
         public void deleteItem(int position) {
+            mRealm.beginTransaction();
             mCities.deleteFromRealm(position);
+            mRealm.commitTransaction();
             notifyItemRemoved(position);
         }
 

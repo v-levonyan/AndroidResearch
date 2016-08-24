@@ -3,25 +3,18 @@ package com.hsv.vahanl.weatherforecast.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
-import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.activities.WeatherActivity;
+import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -112,7 +105,6 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
         @Override
         public boolean onLongClick(View v) {
             mCityAdapter.deleteItem(getAdapterPosition());
-            Toast.makeText(getActivity(), "onLongClick", Toast.LENGTH_SHORT).show();
             return true;
         }
     }
@@ -139,8 +131,6 @@ public class CitiesFragment extends Fragment implements Callback<CityCurrentWeat
 
         @Override
         public int getItemCount() {
-
-            Log.i(TAG, "getItemCount");
             if (mCities.isValid()) {
                 return mCities.size();
             }

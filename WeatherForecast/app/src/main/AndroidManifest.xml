@@ -14,11 +14,9 @@
         <meta-data
             android:name="com.google.android.map.API_KEY"
             android:value="@string/google_map_key" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_search_key2" />
-
+            android:value="@string/google_search_key" />
 
         <activity android:name=".activities.WeatherActivity" />
         <activity android:name=".activities.SearchActivity">
@@ -28,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>

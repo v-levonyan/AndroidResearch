@@ -6,7 +6,6 @@
     <string name="google_map_key">AIzaSyAv_XD440suTr_gc-iES0uwtnc1AoxGVO4</string>
 
 
-
     <string name="weather_sunny">&#xf00d;</string>
     <string name="weather_clear_night">&#xf02e;</string>
 
@@ -19,5 +18,14 @@
 
     <string name="place_not_found">Sorry, no weather data found.</string>
     <string name="desc">weather icon</string>
+    <string name="more_button_text">more</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!--preferences-->
+
+    <string name="pref_connectionType">Connection</string>
+    <string name="pref_forecastDays">Forecast days</string>
+    <string name="settings">settings</string>
+
 
 </resources>

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class WeatherFragment extends CustomFragment {
     TextView mDetailsField;
     TextView mCurrentTemperatureField;
     ImageView mWeatherIcon;
+    Button mMoreButton;
 
     @Override
     public Fragment createFragment() {
@@ -39,7 +41,8 @@ public class WeatherFragment extends CustomFragment {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
         mCityField = (TextView) v.findViewById(R.id.city_field);
         mCityField.setText(mCityCurrentWeatherInfo.getName());
-        mCityField.setOnClickListener(new View.OnClickListener() {
+        mMoreButton = (Button) v.findViewById(R.id.more_button);
+        mMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();

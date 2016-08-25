@@ -1,6 +1,8 @@
 package com.hsv.vahanl.weatherforecast.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.hsv.vahanl.weatherforecast.R;
+import com.hsv.vahanl.weatherforecast.activities.SettingsActivity;
 import com.hsv.vahanl.weatherforecast.adapters.ForecastFragmentPagerAdapter;
 import com.hsv.vahanl.weatherforecast.data.CityForecast;
 import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
@@ -28,6 +31,7 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
+
     @Override
     public Fragment createFragment() {
         return new WeatherForecastFragment();
@@ -36,8 +40,14 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), 10);
+        SharedPreferences mSharedPrefs
+                = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
+        String frcstdaysStr = mSharedPrefs
+                .getString(SettingsActivity
+                        .SettingsFragment.KEY_PREF_FORECAST_DAYS, "");
+        int frcstDays = Integer.valueOf(frcstdaysStr);
+        NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), frcstDays);
     }
 
     @Override
@@ -52,16 +62,20 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     @Override
     public void onResponse(Call<CityForecast> call, Response<CityForecast> response) {
         mCityForecast = response.body();
+        mCityForecast.setId(mCityForecast.getCity().getId());
 //TODO: set primary key
-        CityForecast cityForecast = DBHelper.getForecastById(mCityForecast.getCity().getId());
-        if (cityForecast == null) {
-            mRealm.beginTransaction();
-            mRealm.copyToRealm(mCityForecast);
-            mRealm.commitTransaction();
-        }
+//        CityForecast cityForecast = DBHelper.getForecastById(mCityForecast.getCity().getId());
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(mCityForecast);
+        mRealm.commitTransaction();
+
+//        if (cityForecast == null) {
+//            mRealm.beginTransaction();
+//            mRealm.copyToRealm(mCityForecast);
+//            mRealm.commitTransaction();
+//        }
         mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
                 .getSupportFragmentManager(),
-                getActivity(),
                 mCityForecast));
 
         mTabLayout.setupWithViewPager(mViewPager);

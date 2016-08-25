@@ -1,5 +1,7 @@
 package com.hsv.vahanl.weatherforecast.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 import io.realm.RealmList;
@@ -8,14 +10,15 @@ import lombok.Getter;
 
 @Getter
 public class DailyForecast extends RealmObject {
-    private long dt;
-    private Temperature temp;
-    private double pressure;
-    private double humidity;
-    private RealmList<Weather> weather;
-    private double speed;
-    private double deg;
-    private double clouds;
-    private double rain;
+
+    @Expose private long dt;
+    @Expose private Temperature temp;
+    @Expose private double pressure;
+    @Expose private double humidity;
+    @Expose private RealmList<Weather> weather;
+    @Expose private double speed;
+    @Expose private double deg;
+    @Expose private double clouds;
+    @Expose private double rain;
 }
 

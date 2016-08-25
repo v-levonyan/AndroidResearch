@@ -1,6 +1,7 @@
 package com.hsv.vahanl.weatherforecast.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,8 @@ public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
 
     CitiesFragment mCitiesFragment;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

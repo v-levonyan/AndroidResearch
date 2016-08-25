@@ -33,7 +33,7 @@ public class NetworkUtils {
     }
 
     public static void loadCityForecast(WeatherForecastFragment context, String cityName, int count) {
-        Gson gson = new GsonBuilder().create();
+        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ENDPOIT)
                 .addConverterFactory(GsonConverterFactory.create(gson))

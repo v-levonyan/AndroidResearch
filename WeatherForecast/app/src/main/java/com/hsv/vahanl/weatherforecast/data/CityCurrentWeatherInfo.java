@@ -1,5 +1,7 @@
 package com.hsv.vahanl.weatherforecast.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import lombok.Getter;
 
 public class CityCurrentWeatherInfo extends RealmObject {
     @PrimaryKey
+
     private long id;
     private Coord coord;
     private RealmList<Weather> weather;

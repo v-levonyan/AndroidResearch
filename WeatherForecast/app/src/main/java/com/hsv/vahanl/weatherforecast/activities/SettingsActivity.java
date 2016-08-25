@@ -10,16 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.hsv.vahanl.weatherforecast.R;
 
-public class SettingsActivity extends AppCompatActivity
-        {
+public class SettingsActivity extends AppCompatActivity {
 
-    SharedPreferences.OnSharedPreferenceChangeListener mListener
-            = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +30,6 @@ public class SettingsActivity extends AppCompatActivity
         public static final String KEY_PREF_CONN_STATE = "pref_connection_state";
         public static final String KEY_PREF_FORECAST_DAYS = "pref_forecastDays";
 
-//        SharedPreferences mSharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

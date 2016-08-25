@@ -18,17 +18,12 @@ import java.util.List;
  * Created by vahanl on 8/17/16.
  */
 public class ForecastFragmentPagerAdapter extends FragmentStatePagerAdapter {
-    final int PAGE_COUNT = 3;
     private List<String> tabTitles = new ArrayList<>();
-    private Context mContext;
-    private long mCityId;
     CityForecast mCityForecast;
 
     public ForecastFragmentPagerAdapter(FragmentManager fm,
-                                        Context context,
                                         CityForecast cityForecast) {
         super(fm);
-        mContext = context;
         mCityForecast = cityForecast;
         setTitles();
     }

@@ -1,5 +1,7 @@
 package com.hsv.vahanl.weatherforecast.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.List;
 
 import io.realm.RealmList;
@@ -10,9 +12,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class CityForecast extends RealmObject {
-    private City city;
-    private RealmList<DailyForecast> list;
+
+//    @PrimaryKey
+//    long id;
+    @Expose private City city;
+    @Expose private RealmList<DailyForecast> list;
 
 
 }

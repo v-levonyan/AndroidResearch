@@ -40,13 +40,7 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences mSharedPrefs
-                = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        String frcstdaysStr = mSharedPrefs
-                .getString(SettingsActivity
-                        .SettingsFragment.KEY_PREF_FORECAST_DAYS, "");
-        int frcstDays = Integer.valueOf(frcstdaysStr);
+        int frcstDays = getFrcstDaysFromPrefs();
         NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), frcstDays);
     }
 
@@ -63,17 +57,10 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     public void onResponse(Call<CityForecast> call, Response<CityForecast> response) {
         mCityForecast = response.body();
         mCityForecast.setId(mCityForecast.getCity().getId());
-//TODO: set primary key
-//        CityForecast cityForecast = DBHelper.getForecastById(mCityForecast.getCity().getId());
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(mCityForecast);
         mRealm.commitTransaction();
 
-//        if (cityForecast == null) {
-//            mRealm.beginTransaction();
-//            mRealm.copyToRealm(mCityForecast);
-//            mRealm.commitTransaction();
-//        }
         mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
                 .getSupportFragmentManager(),
                 mCityForecast));
@@ -86,4 +73,17 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     public void onFailure(Call<CityForecast> call, Throwable t) {
         Toast.makeText(getActivity(), "ooops", Toast.LENGTH_LONG).show();
     }
+
+
+    private int getFrcstDaysFromPrefs() {
+        SharedPreferences sharedPrefs
+                = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        String frcstdaysStr = sharedPrefs
+                .getString(SettingsActivity
+                        .SettingsFragment.KEY_PREF_FORECAST_DAYS, null);
+        int frcstDays = frcstdaysStr == null ? 10 : Integer.valueOf(frcstdaysStr);
+        return frcstDays;
+    }
+
 }

@@ -1,7 +1,11 @@
 package com.hsv.vahanl.weatherforecast.activities;
 
 
+import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -54,11 +58,18 @@ public class SettingsActivity extends AppCompatActivity {
                     .unregisterOnSharedPreferenceChangeListener(this);
         }
 
+        @TargetApi(Build.VERSION_CODES.M)
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
             switch (key) {
                 case KEY_PREF_CONN_STATE:
+                    boolean isEnabled = sharedPreferences.getBoolean(key, false);
+
+
+                    WifiManager wifiManager = (WifiManager)this
+                            .getContext().getSystemService(Context.WIFI_SERVICE);
+                    wifiManager.setWifiEnabled(isEnabled);
                     break;
                 case KEY_PREF_FORECAST_DAYS:
                     Preference connPref = findPreference(key);

@@ -15,8 +15,8 @@ import lombok.Setter;
 @Setter
 public class CityForecast extends RealmObject {
 
-//    @PrimaryKey
-//    long id;
+    @PrimaryKey
+    long id;
     @Expose private City city;
     @Expose private RealmList<DailyForecast> list;
 

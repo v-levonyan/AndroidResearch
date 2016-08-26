@@ -1,5 +1,6 @@
 package com.hsv.vahanl.weatherforecast.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,6 +32,7 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
 
+    private SharedPreferences mSharedPrefs;
 
     @Override
     public Fragment createFragment() {
@@ -38,10 +40,18 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int frcstDays = getFrcstDaysFromPrefs();
-        NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), frcstDays);
+        if (isOnline()) {
+            NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), frcstDays);
+        }
     }
 
     @Override
@@ -76,14 +86,17 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
 
 
     private int getFrcstDaysFromPrefs() {
-        SharedPreferences sharedPrefs
-                = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        String frcstdaysStr = sharedPrefs
+        String frcstdaysStr = mSharedPrefs
                 .getString(SettingsActivity
                         .SettingsFragment.KEY_PREF_FORECAST_DAYS, null);
         int frcstDays = frcstdaysStr == null ? 10 : Integer.valueOf(frcstdaysStr);
         return frcstDays;
+    }
+
+    private boolean isOnline() {
+        return mSharedPrefs.getBoolean(SettingsActivity
+                .SettingsFragment.KEY_PREF_CONN_STATE, false);
+
     }
 
 }

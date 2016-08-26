@@ -14,7 +14,6 @@ public class Weather extends RealmObject {
     @Expose private String icon;
     @Override
     public String toString() {
-        return "main: " + main +
-                "description: " + description;
+        return description;
     }
 }

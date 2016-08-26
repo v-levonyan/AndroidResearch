@@ -57,7 +57,7 @@ public class PageFragment extends Fragment {
         cityTextView.setText(mCityForecast.getCity().getName());
         TextView detailsTextView = (TextView) view.findViewById(R.id.details_textView);
         String details = "Humidity: " + dailyForecast.getHumidity() + " %"
-                + "Pressure: " + dailyForecast.getPressure() + " hPa";
+                + " Pressure: " + dailyForecast.getPressure() + " hPa";
         detailsTextView.setText(details);
 
         TextView tempTextView = (TextView) view.findViewById(R.id.temp_textView);

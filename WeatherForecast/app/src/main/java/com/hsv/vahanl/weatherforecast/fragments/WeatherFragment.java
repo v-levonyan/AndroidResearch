@@ -60,11 +60,11 @@ public class WeatherFragment extends CustomFragment {
         mUpdatedField.setText(updatedOn);
         mDetailsField = (TextView) v.findViewById(R.id.details_field);
         String description = mCityCurrentWeatherInfo.getWeather().get(0).getDescription();
-        String humidity = String.valueOf(mCityCurrentWeatherInfo.getMain().getHumidity());
-        String pressure = String.valueOf(mCityCurrentWeatherInfo.getMain().getPressure());
-        mDetailsField.setText(description + "/n"
+        double humidity = mCityCurrentWeatherInfo.getMain().getHumidity();
+        double pressure = mCityCurrentWeatherInfo.getMain().getPressure();
+        mDetailsField.setText(description + "\n"
                 + "Humidity: " + humidity + " %"
-                + "Pressure: " + pressure + " hPa");
+                + " Pressure: " + pressure + " hPa");
         mCurrentTemperatureField = (TextView) v.findViewById(R.id.current_temperature_field);
         String temperature = String.format("%.2f", mCityCurrentWeatherInfo.getMain().getTemp()) + " C";
         mCurrentTemperatureField.setText(temperature);
@@ -75,10 +75,6 @@ public class WeatherFragment extends CustomFragment {
         Context context = mWeatherIcon.getContext();
         int iconId = context.getResources().getIdentifier(iconName, "drawable", context.getPackageName());
         mWeatherIcon.setImageResource(iconId);
-
-//        Drawable iconDrawable = AppUtils.resizeImage(context, iconId, 500, 500);
-//        mWeatherIcon.setImageDrawable(iconDrawable);
-
         return v;
     }
 

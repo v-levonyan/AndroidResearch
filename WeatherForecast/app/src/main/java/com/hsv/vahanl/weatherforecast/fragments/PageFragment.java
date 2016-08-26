@@ -86,6 +86,6 @@ public class PageFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Realm.getDefaultInstance().close();
+        DBHelper.closeRealm();
     }
 }

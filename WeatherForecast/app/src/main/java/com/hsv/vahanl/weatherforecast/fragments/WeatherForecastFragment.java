@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import retrofit2.Response;
  */
 public class WeatherForecastFragment extends CustomFragment implements Callback<CityForecast> {
 
+    private static final String TAG = "WeatherForecastFragment";
     private CityForecast mCityForecast;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -50,7 +52,11 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
         super.onCreate(savedInstanceState);
         int frcstDays = getFrcstDaysFromPrefs();
         if (isOnline()) {
+            Log.i(TAG, "Online mode enabled.....");
             NetworkUtils.loadCityForecast(this, mCityCurrentWeatherInfo.getName(), frcstDays);
+        } else {
+            Log.i(TAG, "Offline mode enabled.....");
+            mCityForecast = DBHelper.getForecastById(mCityCurrentWeatherInfo.getId());
         }
     }
 
@@ -60,6 +66,14 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
         mViewPager = (ViewPager) v.findViewById(R.id.viewpager);
         mTabLayout = (TabLayout) v.findViewById(R.id.sliding_tabs);
 
+        if (!isOnline()) {
+            boolean isupdated = updateUI();
+            if (!isupdated) {
+                Toast.makeText(getActivity(),
+                        "no offline data.Please enable connection",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
         return v;
     }
 
@@ -67,21 +81,28 @@ public class WeatherForecastFragment extends CustomFragment implements Callback<
     public void onResponse(Call<CityForecast> call, Response<CityForecast> response) {
         mCityForecast = response.body();
         mCityForecast.setId(mCityForecast.getCity().getId());
-        mRealm.beginTransaction();
-        mRealm.copyToRealmOrUpdate(mCityForecast);
-        mRealm.commitTransaction();
-
-        mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
-                .getSupportFragmentManager(),
-                mCityForecast));
-
-        mTabLayout.setupWithViewPager(mViewPager);
-
+        DBHelper.copyOrUpdate(mCityForecast);
+        updateUI();
     }
 
     @Override
     public void onFailure(Call<CityForecast> call, Throwable t) {
         Toast.makeText(getActivity(), "ooops", Toast.LENGTH_LONG).show();
+    }
+
+    private boolean updateUI() {
+        mCityForecast = DBHelper.getForecastById(mCityCurrentWeatherInfo.getId());
+        if (mCityForecast == null) {
+            return false;
+        }
+        Log.i(TAG, "City: " + mCityForecast.getCity().getName() +
+                "CityId: " + mCityForecast.getId());
+        mViewPager.setAdapter(new ForecastFragmentPagerAdapter(getActivity()
+                .getSupportFragmentManager(),
+                mCityForecast));
+
+        mTabLayout.setupWithViewPager(mViewPager);
+        return true;
     }
 
 

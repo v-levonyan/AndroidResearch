@@ -19,6 +19,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.hsv.vahanl.weatherforecast.R;
 import com.hsv.vahanl.weatherforecast.fragments.CitiesFragment;
 import com.hsv.vahanl.weatherforecast.network.NetworkUtils;
+import com.hsv.vahanl.weatherforecast.utilities.PrefUtils;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -27,13 +28,15 @@ public class SearchActivity extends AppCompatActivity {
     CitiesFragment mCitiesFragment;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        boolean isConnected = NetworkUtils.isConnectedToNetwork(this);
+        PrefUtils.setConnection(this, isConnected);
 
 
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)

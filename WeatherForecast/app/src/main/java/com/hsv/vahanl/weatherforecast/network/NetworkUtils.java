@@ -1,5 +1,9 @@
 package com.hsv.vahanl.weatherforecast.network;
 
+import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hsv.vahanl.weatherforecast.data.CityCurrentWeatherInfo;
@@ -7,6 +11,7 @@ import com.hsv.vahanl.weatherforecast.data.CityForecast;
 import com.hsv.vahanl.weatherforecast.fragments.CitiesFragment;
 import com.hsv.vahanl.weatherforecast.fragments.WeatherForecastFragment;
 
+import io.realm.internal.Context;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -43,6 +48,16 @@ public class NetworkUtils {
                 .getCityForecast(cityName, APP_ID, TYPE_CELSIUS, count);
 
         call.enqueue(context);
+    }
+
+    public static boolean isConnectedToNetwork(Activity activity) {
+        ConnectivityManager cm =
+                (ConnectivityManager)activity.getSystemService(Activity.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 
 }

@@ -65,9 +65,11 @@ public class SettingsActivity extends AppCompatActivity {
             switch (key) {
                 case KEY_PREF_CONN_STATE:
                     boolean isEnabled = sharedPreferences.getBoolean(key, false);
-                    WifiManager wifiManager = (WifiManager) this
-                            .getContext().getSystemService(Context.WIFI_SERVICE);
-                    wifiManager.setWifiEnabled(isEnabled);
+                    if (isEnabled) {
+                        WifiManager wifiManager = (WifiManager) this
+                                .getContext().getSystemService(Context.WIFI_SERVICE);
+                        wifiManager.setWifiEnabled(isEnabled);
+                    }
                     break;
                 case KEY_PREF_FORECAST_DAYS:
                     Preference connPref = findPreference(key);

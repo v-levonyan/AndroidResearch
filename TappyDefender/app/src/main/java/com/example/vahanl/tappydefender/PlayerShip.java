@@ -25,6 +25,8 @@ public class PlayerShip {
 
     private Rect hitBox;
 
+    private int shieldStrength;
+
     public Rect getHitBox() {
         return hitBox;
     }
@@ -33,11 +35,12 @@ public class PlayerShip {
         this.x = 50;
         this.y = 50;
         speed = 1;
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship_new);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ship);
         boosting = false;
         maxY = screenY - bitmap.getHeight();
         minY = 0;
         hitBox = new Rect(x, y, bitmap.getWidth(), bitmap.getHeight());
+        shieldStrength = 2;
     }
 
     public void update() {
@@ -94,7 +97,11 @@ public class PlayerShip {
         boosting = false;
     }
 
-    public String getShieldStrength() {
-        return "";
+    public int getShieldStrength() {
+        return shieldStrength;
+    }
+
+    public void reduceSheildStrength() {
+        shieldStrength--;
     }
 }

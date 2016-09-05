@@ -3,4 +3,5 @@
     <string name="dialog_set_font">Set font</string>
     <string name="cancel">cancel</string>
     <string name="ok">ok</string>
+    <string name="template_text">Abc</string>
 </resources>

@@ -7,15 +7,16 @@
     android:padding="16dp">
 
     <TextView
-        android:text="TextView"
+        android:text="@string/template_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        tools:text="abc" />
+        android:id="@+id/abc_textView"
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/fonts_spinner"
-        android:background="@android:drawable/spinner_background" />
+        android:background="@android:drawable/spinner_background"
+        android:layout_marginTop="16dp" />
 </LinearLayout>

@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(Typeface font) {
+    public void onDialogPositiveClick(Typeface font, int drawableId) {
         editText.setTypeface(font);
+        editText.setBackgroundResource(drawableId);
 
     }
 

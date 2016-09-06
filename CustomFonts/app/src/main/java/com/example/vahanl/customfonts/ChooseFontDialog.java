@@ -1,10 +1,14 @@
 package com.example.vahanl.customfonts;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -15,13 +19,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.vahanl.customfonts.adapters.BackGroundSpinnerAdapter;
+
 import java.io.IOException;
 
 /**
  * Created by vahanl on 9/5/16.
  */
 
-public class ChooseFontDialog extends DialogFragment implements AdapterView.OnItemSelectedListener {
+public class ChooseFontDialog extends DialogFragment {
 
     private static final String TAG = "ChooseFontDialog";
 
@@ -29,9 +35,10 @@ public class ChooseFontDialog extends DialogFragment implements AdapterView.OnIt
 
     NoticeDialogListener listener;
     Typeface font;
+    int drawableId;
 
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(Typeface font);
+        public void onDialogPositiveClick(Typeface font, int drawablId);
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -54,10 +61,33 @@ public class ChooseFontDialog extends DialogFragment implements AdapterView.OnIt
         View v = inflater.inflate(R.layout.dialog_font, null);
 
         abcTextView = (TextView) v.findViewById(R.id.abc_textView);
+        setFontSpinner(v);
+        setBackgroundSpinner(v);
+
+        builder.setView(v)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onDialogPositiveClick(font, drawableId);
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.onDialogNegativeClick(ChooseFontDialog.this);
+                    }
+                });
 
 
-        Spinner spinner = (Spinner) v.findViewById(R.id.fonts_spinner);
+        return builder.create();
+    }
 
+    public TextView getAbcTextView() {
+        return abcTextView;
+    }
+
+    private void setFontSpinner(View v) {
+        Spinner fontSpinner = (Spinner) v.findViewById(R.id.fonts_spinner);
 
         String[] fonts = new String[0];
         try {
@@ -72,43 +102,41 @@ public class ChooseFontDialog extends DialogFragment implements AdapterView.OnIt
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        fontSpinner.setAdapter(adapter);
+        fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String fontName = (String) parent.getItemAtPosition(position);
+                String assetPath = "fonts/" + fontName;
+                font = Typeface.createFromAsset(getActivity().getAssets(), assetPath);
+                abcTextView.setTypeface(font);
+                Log.i(TAG, "fontname: " + fontName);
+            }
 
-        builder.setView(v)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogPositiveClick(font);
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        listener.onDialogNegativeClick(ChooseFontDialog.this);
-                    }
-                });
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-
-        return builder.create();
+            }
+        });
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String fontName = (String) parent.getItemAtPosition(position);
-        String assetPath = "fonts/" + fontName;
-        font = Typeface.createFromAsset(getActivity().getAssets(), assetPath);
-        abcTextView.setTypeface(font);
-        Log.i(TAG, "fontname: " + fontName);
-    }
+    private void setBackgroundSpinner(View v) {
+        Spinner backgroundSpinner = (Spinner) v.findViewById(R.id.background_spinner);
+        backgroundSpinner.setAdapter(new BackGroundSpinnerAdapter(getActivity()));
+        backgroundSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                drawableId = (int) parent.getItemAtPosition(position);
+                abcTextView.setBackgroundResource(drawableId);
+            }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-    }
-
-    public TextView getAbcTextView() {
-        return abcTextView;
+            }
+        });
     }
 
 }

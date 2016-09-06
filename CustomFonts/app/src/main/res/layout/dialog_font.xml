@@ -4,19 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_centerHorizontal="false"
+    android:gravity="center_horizontal">
 
     <TextView
-        android:text="@string/template_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/abc_textView"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/template_text"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:gravity="center_horizontal"
+        android:paddingTop="16dp" />
 
     <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/fonts_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:background="@android:drawable/spinner_background"
-        android:layout_marginTop="16dp" />
+        android:spinnerMode="dialog"/>
+
+    <Spinner
+        android:id="@+id/background_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:drawable/spinner_background"
+        android:spinnerMode="dialog"/>
 </LinearLayout>

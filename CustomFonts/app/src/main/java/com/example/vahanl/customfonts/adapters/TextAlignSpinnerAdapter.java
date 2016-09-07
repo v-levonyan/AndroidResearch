@@ -1,8 +1,6 @@
 package com.example.vahanl.customfonts.adapters;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.View;
@@ -13,30 +11,28 @@ import android.widget.ImageView;
 import com.example.vahanl.customfonts.R;
 
 /**
- * Created by vahanl on 9/6/16.
+ * Created by vahanl on 9/7/16.
  */
 
-public class BackGroundSpinnerAdapter extends BaseAdapter {
+public class TextAlignSpinnerAdapter extends BaseAdapter {
 
     private Activity mContext;
 
-    private Integer[] textBgdrawables = {R.drawable.comments_48, R.drawable.speech_bubble};
+    private Integer[] textAlignIcons =
+            {R.drawable.left_align, R.drawable.center_align, R.drawable.right_align};
 
-
-    public BackGroundSpinnerAdapter(Activity context) {
-        mContext = context;
+    public TextAlignSpinnerAdapter(Activity mContext) {
+        this.mContext = mContext;
     }
-
-
 
     @Override
     public int getCount() {
-        return textBgdrawables.length;
+        return textAlignIcons.length;
     }
 
     @Override
     public Object getItem(int position) {
-        return textBgdrawables[position];
+        return textAlignIcons[position];
     }
 
     @Override
@@ -47,26 +43,25 @@ public class BackGroundSpinnerAdapter extends BaseAdapter {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View itemView = convertView;
-        ViewHolder textBackgroundViewHolder;
+        ViewHolder textAlignViewHolder;
 
         if (convertView == null) {
             itemView = mContext.getLayoutInflater()
                     .inflate(R.layout.spinner_row, parent, false);
-            textBackgroundViewHolder = new ViewHolder();
-            textBackgroundViewHolder.imageViewTextBackground =
+            textAlignViewHolder = new ViewHolder();
+            textAlignViewHolder.imageViewTextAlign =
                     (ImageView) itemView.findViewById(R.id.spinner_image);
-            itemView.setTag(textBackgroundViewHolder);
+            itemView.setTag(textAlignViewHolder);
         } else {
-            textBackgroundViewHolder = (ViewHolder) itemView.getTag();
+            textAlignViewHolder = (ViewHolder) itemView.getTag();
         }
-        textBackgroundViewHolder.imageViewTextBackground
-                .setImageDrawable(mContext.getDrawable(textBgdrawables[position]));
+        textAlignViewHolder.imageViewTextAlign
+                .setImageDrawable(mContext.getDrawable(textAlignIcons[position]));
         return itemView;
     }
 
     private static class ViewHolder {
-        ImageView imageViewTextBackground;
+        ImageView imageViewTextAlign;
     }
 }

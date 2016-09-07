@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/abc_textView"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="@string/template_text"
         android:textSize="@dimen/abc_text_size_medium_material"
@@ -27,6 +27,14 @@
 
     <Spinner
         android:id="@+id/background_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:background="@android:drawable/spinner_background"
+        android:spinnerMode="dialog"/>
+
+    <Spinner
+        android:id="@+id/text_align_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"

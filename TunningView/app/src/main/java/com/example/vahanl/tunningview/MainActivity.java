@@ -1,17 +1,47 @@
 package com.example.vahanl.tunningview;
 
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
+import android.view.DragEvent;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.Settings;
+import com.alexvasilkov.gestures.views.GestureImageView;
+
+import java.io.UnsupportedEncodingException;
+
+import static android.R.attr.bitmap;
+import static android.R.attr.width;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final GestureImageView gestureView = (GestureImageView) findViewById(R.id.imageView);
+
+
         EditText editText = (EditText) findViewById(R.id.editText2);
-        LinearLayout.LayoutParams layoutParams =
-                (LinearLayout.LayoutParams) editText.getLayoutParams();
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -46,41 +77,66 @@ public class MainActivity extends AppCompatActivity {
                         " count: " + count);
             }
 
+
             @Override
             public void afterTextChanged(Editable s) {
                 Log.i(TAG, "afterTextChanged: " + s.toString());
 
-
             }
         });
 
-//        TextView tv = new TextView(this);
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(80, 100);
-//        tv.setLayoutParams(layoutParams);
-//        tv.setText("testing 1 2 3");
-//        tv.setTextColor(Color.BLACK);
-//        tv.setBackgroundColor(Color.TRANSPARENT);
+
+        gestureView.setBackgroundColor(Color.BLUE);
+        gestureView.
+                setImageBitmap(null);
+
+        int width = getWindowManager().getDefaultDisplay().getWidth();
+        int height = getWindowManager().getDefaultDisplay().getHeight();
+
+        gestureView.getController().getSettings()
+                .setMaxZoom(2f)
+                .setPanEnabled(true)
+                .setZoomEnabled(true)
+                .setDoubleTapEnabled(true)
+                .setRotationEnabled(true)
+                .setRestrictRotation(false)
+                .setOverscrollDistance(0f, 0f)
+                .setOverzoomFactor(2f)
+                .setFillViewport(false)
+                .setFitMethod(Settings.Fit.INSIDE)
+                .setGravity(Gravity.CENTER)
+                .setRestrictBounds(false);
 
 
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
 
+        gestureView.setImageBitmap(bitmap);
 
-        Bitmap testB;
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setTextSize(64);
+        paint.setTextAlign(Paint.Align.CENTER);
+        float text_x = getScreenCenter().x;
+        float text_y = getScreenCenter().y;
+        canvas.drawText("Dont worry be happy", text_x, text_y, paint);
 
-        testB = Bitmap.createBitmap(
-                layoutParams.width,
-                layoutParams.height,
-                Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(testB);
-//        tv.layout(0, 0, 80, 100);
-        editText.draw(c);
-
-        ImageView iv = (ImageView) findViewById(R.id.menuIcon);
-        iv.setLayoutParams(layoutParams);
-        iv.setBackgroundColor(Color.GRAY);
-        iv.setImageBitmap(testB);
-        iv.setMaxHeight(layoutParams.height);
-        iv.setMaxWidth(layoutParams.width);
 
     }
+
+    private PointF getScreenCenter() {
+        Display display = getWindowManager().getDefaultDisplay();
+        final Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        float centerX = width/2;
+        float centerY=height/2;
+        return new PointF(centerX, centerY);
+    }
+
+
+
+
 
 }

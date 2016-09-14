@@ -2,6 +2,7 @@ package com.example.vahanl.githubusers;
 
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +29,7 @@ public class GithubUsersListActivity extends AppCompatActivity
     private LinearLayoutManager mLinearLayoutManager;
     private UsersAdapter mAdapter;
     private List<User> mUsers;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,26 @@ public class GithubUsersListActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshItems();
+            }
+        });
+
         mRecyclerView = (RecyclerView) findViewById(R.id.ultimate_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         NetworkUtils.loadUsers(this);
+
     }
+
+    void refreshItems() {
+        NetworkUtils.loadUsers(this);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,13 +86,28 @@ public class GithubUsersListActivity extends AppCompatActivity
     @Override
     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
         mUsers = response.body();
-        mAdapter = new UsersAdapter(mUsers, this);
+
+        updateUi();
+        mAdapter.clear();
+        mAdapter.addAll(mUsers);
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void updateUi() {
+        if (mAdapter == null) {
+            mAdapter = new UsersAdapter(this);
+       }
         mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onFailure(Call<List<User>> call, Throwable t) {
-        Toast.makeText(this, "Failed to load users", Toast.LENGTH_LONG);
+        Toast.makeText(this,
+                "Failed to load users.\nPlease check connection",
+                Toast.LENGTH_LONG).show();
+        updateUi();
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private List<User> filter(List<User> users, String query) {

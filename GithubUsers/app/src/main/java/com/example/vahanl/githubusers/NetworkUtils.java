@@ -1,5 +1,9 @@
 package com.example.vahanl.githubusers;
 
+import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.example.vahanl.githubusers.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -26,5 +30,15 @@ public class NetworkUtils {
         GithubApiInterface githubApiInterface = retrofit.create(GithubApiInterface.class);
         Call<List<User>> call = githubApiInterface.usersList();
         call.enqueue(context);
+    }
+
+    public static boolean isConnectedToNetwork(Activity activity) {
+        ConnectivityManager cm =
+                (ConnectivityManager)activity.getSystemService(Activity.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }

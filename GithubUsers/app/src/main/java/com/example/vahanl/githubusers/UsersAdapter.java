@@ -29,8 +29,8 @@ public class UsersAdapter extends
     private List<User> mUsers;
     private Context mContext;
 
-    public UsersAdapter(List<User> users, Context context) {
-        mUsers = new ArrayList<>(users);
+    public UsersAdapter(Context context) {
+        mUsers = new ArrayList<>();
         mContext = context;
     }
 
@@ -116,6 +116,16 @@ public class UsersAdapter extends
         }
     }
 
+    public void clear() {
+        mUsers.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<User> users) {
+        mUsers.addAll(users);
+        notifyDataSetChanged();
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
@@ -142,9 +152,5 @@ public class UsersAdapter extends
             intent.putExtra(USER_URL, mUser.getHtml_url());
             mContext.startActivity(intent);
         }
-    }
-
-    public Context getContext() {
-        return mContext;
     }
 }

@@ -51,6 +51,7 @@ public class GithubUsersListActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.ultimate_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mSwipeRefreshLayout.setRefreshing(true);
         NetworkUtils.loadUsers(this);
 
     }

@@ -15,11 +15,6 @@ import retrofit2.http.Query;
 
 public interface GithubApiInterface {
 
-
-
-//    @GET("users/{username}")
-//    Call<User> getUser(@Path("username") String username);
-
     @GET("users")
     Call<List<User>> usersList();
 }

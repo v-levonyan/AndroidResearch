@@ -8,19 +8,20 @@
               android:orientation="vertical"
               tools:context="com.example.vahanl.githubusers.GithubUsersListActivity">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:minHeight="?attr/actionBarSize"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:titleTextColor="@android:color/white"-->
-        <!--android:background="?attr/colorPrimary">-->
-    <!--</android.support.v7.widget.Toolbar>-->
-
     <include
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="@string/network_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/network_info"
+        android:gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:visibility="gone"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"

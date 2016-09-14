@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GithubUsers</string>
     <string name="action_search">search</string>
+    <string name="network_text" >No network connection</string>
 </resources>

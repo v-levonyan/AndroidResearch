@@ -1,6 +1,8 @@
 package com.example.vahanl.githubusers;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.support.v4.text.TextDirectionHeuristicCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vahanl.githubusers.models.User;
@@ -30,6 +34,7 @@ public class GithubUsersListActivity extends AppCompatActivity
     private UsersAdapter mAdapter;
     private List<User> mUsers;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private TextView mNetworkInfoTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,8 @@ public class GithubUsersListActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mNetworkInfoTextView = (TextView) findViewById(R.id.network_info);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -86,6 +93,7 @@ public class GithubUsersListActivity extends AppCompatActivity
 
     @Override
     public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+        mNetworkInfoTextView.setVisibility(View.GONE);
         mUsers = response.body();
 
         updateUi();
@@ -103,12 +111,9 @@ public class GithubUsersListActivity extends AppCompatActivity
 
     @Override
     public void onFailure(Call<List<User>> call, Throwable t) {
-        Toast.makeText(this,
-                "Failed to load users.\nPlease check connection",
-                Toast.LENGTH_LONG).show();
         updateUi();
-
         mSwipeRefreshLayout.setRefreshing(false);
+        mNetworkInfoTextView.setVisibility(View.VISIBLE);
     }
 
     private List<User> filter(List<User> users, String query) {

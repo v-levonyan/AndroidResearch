@@ -7,8 +7,6 @@ package com.example.vahanl.githubusers.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.Getter;
-
 public class User {
 
     private String login;

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.example.vahanl.githubusers.models.User;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class UsersAdapter extends
     private Context mContext;
 
     public UsersAdapter(List<User> users, Context context) {
-        mUsers = users;
+        mUsers = new ArrayList<>(users);
         mContext = context;
     }
 
@@ -63,6 +64,58 @@ public class UsersAdapter extends
     public int getItemCount() {
         return mUsers.size();
     }
+
+    public User removeItem(int position) {
+        final User user = mUsers.remove(position);
+        notifyItemRemoved(position);
+        return user;
+    }
+
+    public void addItem(int position, User user) {
+        mUsers.add(position, user);
+        notifyItemInserted(position);
+    }
+
+    public void moveItem(int fromPosition, int toPosition) {
+        final User user = mUsers.remove(fromPosition);
+        mUsers.add(toPosition, user);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void animateTo(List<User> users) {
+        applyAndAnimateRemovals(users);
+        applyAndAnimateAdditions(users);
+        applyAndAnimateMovedItems(users);
+    }
+
+    private void applyAndAnimateMovedItems(List<User> newUsers) {
+        for (int toPosition = newUsers.size() -1; toPosition >= 0; toPosition--) {
+            final User user = newUsers.get(toPosition);
+            final int fromPosition = mUsers.indexOf(user);
+            if (fromPosition >=0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(List<User> newUsers) {
+        for (int i = 0, count = newUsers.size(); i < count; i++) {
+            final User user = newUsers.get(i);
+            if (!mUsers.contains(user)) {
+                addItem(i, user);
+            }
+        }
+    }
+
+    private void applyAndAnimateRemovals(List<User> newUsers) {
+        for (int i = mUsers.size() - 1; i >= 0; i-- ) {
+            final User user = mUsers.get(i);
+            if (!newUsers.contains(user)) {
+                removeItem(i);
+            }
+        }
+    }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{

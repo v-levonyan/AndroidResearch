@@ -1,19 +1,15 @@
 package com.example.vahanl.customfonts;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,12 +18,13 @@ import com.alexvasilkov.gestures.views.GestureImageView;
 import com.example.vahanl.customfonts.utilities.ImageUtils;
 
 public class MainActivity extends AppCompatActivity
-        implements ChooseFontDialog.NoticeDialogListener{
+        implements ChooseFontDialog.NoticeDialogListener {
 
     private EditText mEditText;
     private TextView mTaptoEdit;
     private ImageUtils mImageUtils;
     private GestureImageView mGestureImageView;
+    private TextView mBubbleTextView;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -38,43 +35,31 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mGestureImageView = (GestureImageView) findViewById(R.id.gesture_image_view);
+        mBubbleTextView = (TextView) findViewById(R.id.singleMessage);
+
 
         mImageUtils = new ImageUtils(mGestureImageView, this);
         mImageUtils.setProperties();
-        int width = getWindowManager().getDefaultDisplay().getWidth();
-        int height = getWindowManager().getDefaultDisplay().getHeight();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        mImageUtils.setBackgroundImage(bitmap);
-        mImageUtils.setBackColor(Color.BLUE);
-        mImageUtils.setTextSize(64);
+
+
+        mImageUtils.setScreenSizeBitmap();
+
+        mImageUtils.loadBitmapFromView(mBubbleTextView);
+
+
 
         mEditText = (EditText) findViewById(R.id.edit_text);
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String text = v.getText().toString();
-                    mImageUtils.drawtext(text);
-                }
-                return false;
-            }
-        });
         mTaptoEdit = (TextView) findViewById(R.id.tap_to_edit);
-        mTaptoEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction transaction = fm.beginTransaction();
-                transaction.add(R.id.fragment_container, new ChooseFontDialog());
-                transaction.commit();
-            }
-        });
+
+        setListeners();
     }
+
 
     @Override
     public void onFontSelected(Typeface font) {
-        mImageUtils.setFont(font);
+//        mImageUtils.setFont(font);
 //        mEditText.setTypeface(font);
     }
 
@@ -85,9 +70,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFrameSelected(int drawableId) {
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId);
-        mImageUtils.setBackgroundImage(bm);
-//        mEditText.setBackgroundResource(drawableId);
+//        Drawable drawable = getResources().getDrawable(drawableId);
+//        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
+//        mImageUtils.drawShape(bitmap);
+
     }
 
     @Override
@@ -118,5 +104,31 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
 
+    }
+
+    private void setListeners() {
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String text = v.getText().toString();
+                    mImageUtils.drawtext(text);
+                }
+                return false;
+            }
+        });
+
+        mTaptoEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mGestureImageView.getController().getSettings().disableGestures();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+                transaction.add(R.id.fragment_container, new ChooseFontDialog());
+                transaction.commit();
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            }
+        });
     }
 }

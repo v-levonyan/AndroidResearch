@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.vahanl.customfonts.MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.example.vahanl.customfonts.MainActivity">
 
-
-
-    <com.alexvasilkov.gestures.views.GestureImageView
-        android:id="@+id/gesture_image_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="false"
-        android:layout_centerInParent="true"
-        android:src="@color/colorAccent" />
+    <TextView
+        android:id="@+id/singleMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dip"
+        android:background="@drawable/bubble_b"
+        android:paddingLeft="10dip"
+        android:text="Hello bubbles!"
+        android:textColor="@android:color/primary_text_light" />
 
 
     <EditText
@@ -30,14 +31,10 @@
         android:inputType="text"
         android:maxLines="1">
 
-        <requestFocus />
+        <requestFocus/>
     </EditText>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/edit_text" />
+
 
     <TextView
         android:id="@+id/tap_to_edit"
@@ -48,6 +45,13 @@
         android:layout_alignParentTop="true"
         android:text="@string/edit_text_view"
         android:textColor="@color/material_deep_teal_500"
-        android:textSize="@dimen/abc_text_size_medium_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"/>
+
+    <com.alexvasilkov.gestures.views.GestureImageView
+        android:id="@+id/gesture_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tap_to_edit"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

@@ -1,15 +1,26 @@
 package com.example.vahanl.customfonts.utilities;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.View;
 
 import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.views.GestureImageView;
@@ -46,7 +57,7 @@ public class ImageUtils {
                 .setFillViewport(false)
                 .setFitMethod(Settings.Fit.INSIDE)
                 .setGravity(Gravity.CENTER)
-                .setRestrictBounds(false);
+                .setRestrictBounds(true);
     }
 
     private PointF getScreenCenter() {
@@ -65,6 +76,10 @@ public class ImageUtils {
                 getScreenCenter().x,
                 getScreenCenter().y,
                 mPaint);
+    }
+
+    public void drawShape(Bitmap bm) {
+        mCanvas.drawBitmap(bm, getScreenCenter().x, getScreenCenter().y, mPaint);
     }
 
     public void setColor(int color) {
@@ -110,6 +125,45 @@ public class ImageUtils {
         float text_x = getScreenCenter().x;
         float text_y = getScreenCenter().y;
         canvas.drawText(text, text_x, text_y, paint);
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+
+
+
+    public void loadBitmapFromView(View v) {
+        if (v.getMeasuredHeight() <= 0) {
+            v.measure(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+            Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+            v.draw(c);
+            drawShape(b);
+        }
+
+
+    }
+
+    public void setScreenSizeBitmap() {
+        int width = DeviceDimensionsHelper.getDisplayWidth(mActivity);
+        int height = DeviceDimensionsHelper.getDisplayHeight(mActivity);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        setBackgroundImage(bitmap);
     }
 
 }

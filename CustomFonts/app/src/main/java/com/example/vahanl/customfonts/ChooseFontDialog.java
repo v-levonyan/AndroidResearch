@@ -9,10 +9,12 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.vahanl.customfonts.adapters.BackGroundSpinnerAdapter;
@@ -34,6 +36,8 @@ public class ChooseFontDialog extends DialogFragment {
     int bgDrawableId;
     int textAlignDrawableId;
 
+    private EditText mEditText;
+
     public interface NoticeDialogListener {
 
         public void onFontSelected(Typeface font);
@@ -41,7 +45,7 @@ public class ChooseFontDialog extends DialogFragment {
         public void onAlignmentSelected(int drawableId);
 
 
-        public void onDialogPositiveClick(Typeface font, int drawablId);
+        public void onDialogPositiveClick();
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -59,16 +63,36 @@ public class ChooseFontDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_font, container,false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         setFontSpinner(view);
         setBackgroundSpinner(view);
         setTextAlignSpinner(view);
-        return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.dismiss:
+                dismiss();
+                return true;
+            case R.id.ok:
+                listener.onDialogPositiveClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void setFontSpinner(View v) {

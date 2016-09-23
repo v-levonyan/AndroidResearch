@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -66,8 +67,8 @@ public class ImageUtils {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        float centerX = width/2;
-        float centerY=height/2;
+        float centerX = width / 2;
+        float centerY = height / 2;
         return new PointF(centerX, centerY);
     }
 
@@ -86,7 +87,7 @@ public class ImageUtils {
         mPaint.setColor(color);
     }
 
-    public void setBackColor(int color){
+    public void setBackColor(int color) {
         mCanvas.drawColor(color);
     }
 
@@ -101,6 +102,10 @@ public class ImageUtils {
     public void setBackgroundImage(Bitmap bitmap) {
         mCanvas.setBitmap(bitmap);
         mGestureImageView.setImageBitmap(bitmap);
+    }
+
+    public void clearCanvas() {
+        mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
     }
 
     public void setFont(Typeface typeface) {
@@ -127,10 +132,10 @@ public class ImageUtils {
         canvas.drawText(text, text_x, text_y, paint);
     }
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
 
         if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
+            return ((BitmapDrawable) drawable).getBitmap();
         }
 
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
@@ -144,19 +149,20 @@ public class ImageUtils {
     }
 
 
-
-
     public void loadBitmapFromView(View v) {
         if (v.getMeasuredHeight() <= 0) {
             v.measure(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-            Bitmap b = Bitmap.createBitmap(v.getMeasuredWidth(), v.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
-            Canvas c = new Canvas(b);
-            v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-            v.draw(c);
-            drawShape(b);
+
         }
-
-
+        Bitmap b = Bitmap.createBitmap(
+                v.getMeasuredWidth(),
+                v.getMeasuredHeight(),
+                Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
+        v.draw(c);
+        mCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        drawShape(b);
     }
 
     public void setScreenSizeBitmap() {

@@ -21,9 +21,7 @@ public class BackGroundSpinnerAdapter extends BaseAdapter {
     private Activity mContext;
 
     private Integer[] textBgdrawables =
-            {R.drawable.ic_iconmonstr_speech_bubble_1,
-                    R.drawable.ic_iconmonstr_speech_bubble_10,
-            R.drawable.ic_iconmonstr_speech_bubble_22};
+            {R.drawable.bubble_a, R.drawable.bubble_b};
 
 
     public BackGroundSpinnerAdapter(Activity context) {

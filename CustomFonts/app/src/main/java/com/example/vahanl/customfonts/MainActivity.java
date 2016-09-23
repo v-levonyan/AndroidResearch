@@ -1,5 +1,6 @@
 package com.example.vahanl.customfonts;
 
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -7,9 +8,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,24 +38,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGestureImageView = (GestureImageView) findViewById(R.id.gesture_image_view);
-        mBubbleTextView = (TextView) findViewById(R.id.singleMessage);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        mBubbleTextView = (TextView) findViewById(R.id.singleMessage);
+        mEditText = (EditText) findViewById(R.id.edit_text);
+        mTaptoEdit = (TextView) findViewById(R.id.tap_to_edit);
+        mGestureImageView = (GestureImageView) findViewById(R.id.gesture_image_view);
 
         mImageUtils = new ImageUtils(mGestureImageView, this);
         mImageUtils.setProperties();
-
-
         mImageUtils.setScreenSizeBitmap();
 
-        mImageUtils.loadBitmapFromView(mBubbleTextView);
-
-
-
-        mEditText = (EditText) findViewById(R.id.edit_text);
-        mTaptoEdit = (TextView) findViewById(R.id.tap_to_edit);
-
         setListeners();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dialog, menu);
+        return true;
     }
 
 
@@ -70,10 +73,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFrameSelected(int drawableId) {
-//        Drawable drawable = getResources().getDrawable(drawableId);
-//        Bitmap bitmap = ImageUtils.drawableToBitmap(drawable);
-//        mImageUtils.drawShape(bitmap);
-
+        mBubbleTextView.setBackgroundResource(drawableId);
+        mImageUtils.loadBitmapFromView(mBubbleTextView);
     }
 
     @Override
@@ -96,9 +97,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogPositiveClick(Typeface font, int drawableId) {
-
-
+    public void onDialogPositiveClick() {
     }
 
     @Override
@@ -106,13 +105,14 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     private void setListeners() {
         mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String text = v.getText().toString();
-                    mImageUtils.drawtext(text);
+                    mBubbleTextView.setText(text);
                 }
                 return false;
             }
@@ -121,14 +121,13 @@ public class MainActivity extends AppCompatActivity
         mTaptoEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mGestureImageView.getController().getSettings().disableGestures();
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction transaction = fm.beginTransaction();
                 transaction.add(R.id.fragment_container, new ChooseFontDialog());
                 transaction.commit();
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
+
     }
+
 }

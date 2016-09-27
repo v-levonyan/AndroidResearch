@@ -1,8 +1,6 @@
 package com.example.vahanl.customfonts.adapters;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.View;
@@ -21,13 +19,15 @@ public class BackGroundSpinnerAdapter extends BaseAdapter {
     private Activity mContext;
 
     private Integer[] textBgdrawables =
-            {R.drawable.bubble_a, R.drawable.bubble_b};
+            {
+                    R.drawable.bubble_a,
+                    R.drawable.bubble_b,
+            };
 
 
     public BackGroundSpinnerAdapter(Activity context) {
         mContext = context;
     }
-
 
 
     @Override

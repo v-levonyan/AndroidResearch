@@ -2,23 +2,15 @@ package com.example.vahanl.customfonts.utilities;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.Layout;
-import android.text.StaticLayout;
-import android.text.TextPaint;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -58,7 +50,9 @@ public class ImageUtils {
                 .setFillViewport(false)
                 .setFitMethod(Settings.Fit.INSIDE)
                 .setGravity(Gravity.CENTER)
-                .setRestrictBounds(true);
+                .setRestrictBounds(false)
+        .setMovementArea(DeviceDimensionsHelper.getDisplayWidth(mActivity),
+                DeviceDimensionsHelper.getDisplayHeight(mActivity));
     }
 
     private PointF getScreenCenter() {
@@ -80,7 +74,9 @@ public class ImageUtils {
     }
 
     public void drawShape(Bitmap bm) {
-        mCanvas.drawBitmap(bm, getScreenCenter().x, getScreenCenter().y, mPaint);
+        int[] location = new int[2];
+        mGestureImageView.getLocationOnScreen(location);
+        mCanvas.drawBitmap(bm, location[0], location[1], mPaint);
     }
 
     public void setColor(int color) {
@@ -150,10 +146,8 @@ public class ImageUtils {
 
 
     public void loadBitmapFromView(View v) {
-        if (v.getMeasuredHeight() <= 0) {
-            v.measure(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
+        v.measure(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
 
-        }
         Bitmap b = Bitmap.createBitmap(
                 v.getMeasuredWidth(),
                 v.getMeasuredHeight(),

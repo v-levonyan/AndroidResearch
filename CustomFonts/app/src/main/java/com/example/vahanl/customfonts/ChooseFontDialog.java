@@ -15,12 +15,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.vahanl.customfonts.adapters.BackGroundSpinnerAdapter;
 import com.example.vahanl.customfonts.adapters.TextAlignSpinnerAdapter;
 
 import java.io.IOException;
+
+import petrov.kristiyan.colorpicker.ColorPicker;
 
 /**
  * Created by vahanl on 9/5/16.
@@ -35,17 +39,21 @@ public class ChooseFontDialog extends DialogFragment {
     Typeface font;
     int bgDrawableId;
     int textAlignDrawableId;
-
     private EditText mEditText;
 
     public interface NoticeDialogListener {
 
         public void onFontSelected(Typeface font);
+
         public void onFrameSelected(int drawableId);
+
         public void onAlignmentSelected(int drawableId);
+
+        public void onColorSelected(int color);
 
 
         public void onDialogPositiveClick();
+
         public void onDialogNegativeClick(DialogFragment dialog);
     }
 
@@ -56,7 +64,7 @@ public class ChooseFontDialog extends DialogFragment {
             listener = (NoticeDialogListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() +
-            "must implement NoticeDialogListener");
+                    "must implement NoticeDialogListener");
         }
     }
 
@@ -69,7 +77,7 @@ public class ChooseFontDialog extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.dialog_font, container,false);
+        View view = inflater.inflate(R.layout.dialog_font, container, false);
         return view;
     }
 
@@ -79,6 +87,24 @@ public class ChooseFontDialog extends DialogFragment {
         setFontSpinner(view);
         setBackgroundSpinner(view);
         setTextAlignSpinner(view);
+        setColorDialog(view);
+    }
+
+    private void setColorDialog(View view) {
+        ImageButton colorImageButton = (ImageButton) view.findViewById(R.id.colorImageButton);
+        colorImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPicker colorPicker = new ColorPicker(getActivity());
+                colorPicker.show();
+                colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                    @Override
+                    public void onChooseColor(int position, int color) {
+                        listener.onColorSelected(color);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -155,7 +181,7 @@ public class ChooseFontDialog extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 textAlignDrawableId = (int) parent.getItemAtPosition(position);
                 listener.onAlignmentSelected(textAlignDrawableId);
-           }
+            }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {

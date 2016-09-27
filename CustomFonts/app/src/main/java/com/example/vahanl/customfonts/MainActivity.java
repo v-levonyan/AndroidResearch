@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alexvasilkov.gestures.Settings;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.example.vahanl.customfonts.utilities.ImageUtils;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         mBubbleTextView = (TextView) findViewById(R.id.singleMessage);
         mEditText = (EditText) findViewById(R.id.edit_text);
         mTaptoEdit = (TextView) findViewById(R.id.tap_to_edit);
@@ -62,8 +65,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFontSelected(Typeface font) {
-//        mImageUtils.setFont(font);
-//        mEditText.setTypeface(font);
+        mBubbleTextView.setTypeface(font);
+        mImageUtils.loadBitmapFromView(mBubbleTextView);
     }
 
     @Override
@@ -81,19 +84,25 @@ public class MainActivity extends AppCompatActivity
     public void onAlignmentSelected(int drawableId) {
         switch (drawableId) {
             case R.drawable.left_align:
-//                mEditText.setGravity(Gravity.START);
-                mImageUtils.setTextAlign(Paint.Align.LEFT);
+                mBubbleTextView.setGravity(Gravity.LEFT);
                 break;
             case R.drawable.center_align:
-                mImageUtils.setTextAlign(Paint.Align.CENTER);
-//                mEditText.setGravity(Gravity.CENTER);
+                mBubbleTextView.setGravity(Gravity.CENTER);
                 break;
             case R.drawable.right_align:
-//                mEditText.setGravity(Gravity.END);
-                mImageUtils.setTextAlign(Paint.Align.RIGHT);
+                mBubbleTextView.setGravity(Gravity.RIGHT);
                 break;
+            default:
+                mBubbleTextView.setGravity(Gravity.NO_GRAVITY);
         }
+        mImageUtils.loadBitmapFromView(mBubbleTextView);
 
+    }
+
+    @Override
+    public void onColorSelected(int color) {
+        mBubbleTextView.setTextColor(color);
+        mImageUtils.loadBitmapFromView(mBubbleTextView);
     }
 
     @Override
@@ -113,6 +122,7 @@ public class MainActivity extends AppCompatActivity
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     String text = v.getText().toString();
                     mBubbleTextView.setText(text);
+                    mImageUtils.loadBitmapFromView(mBubbleTextView);
                 }
                 return false;
             }

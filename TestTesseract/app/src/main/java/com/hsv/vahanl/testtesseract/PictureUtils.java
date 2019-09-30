@@ -48,9 +48,14 @@ public class PictureUtils {
         return getScaledBitmap(path, size.x, size.y);
     }
 
+    public static Bitmap getScaledBitmap(String path, Point size) {
+        return getScaledBitmap(path, size.x, size.y);
+    }
+
     public static File createImageFile(Context context) {
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timestamp + "_";
+//        File imagePath = new File(context.getFilesDir(), "images");
         File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 //        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
 //        photoPath = "file:" + image.getAbsolutePath();

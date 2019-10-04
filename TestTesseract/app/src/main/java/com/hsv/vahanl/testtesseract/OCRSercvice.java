@@ -1,7 +1,6 @@
 package com.hsv.vahanl.testtesseract;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -30,7 +29,6 @@ public class OCRSercvice extends IntentService {
 
         String photoPath = intent.getStringExtra(MainActivity.PHOTO_PATH);
         Point size = intent.getParcelableExtra(MainActivity.SIZE_EXTRA);
-//        Bitmap bitmap = (Bitmap) intent.getParcelableExtra(MainActivity.IMAGE_EXTRA);
         Bitmap bitmap = PictureUtils.getScaledBitmap(photoPath,size);
         String dataPath = intent.getStringExtra(MainActivity.DATAPATH_EXTRA);
         String lang = "eng";
